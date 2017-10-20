@@ -1,0 +1,10 @@
+<phpunit colors="true" strict="true" bootstrap="tests/autoload.php">
+    <php>
+        <env name="PHP_ACCESS_TOKEN" value=""/>
+    </php>
+    <testsuites>
+        <testsuite name="The project's test suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

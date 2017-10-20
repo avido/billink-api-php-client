@@ -1,0 +1,31 @@
+{
+    "name": "avido/billink-api-php-client",
+    "type": "library",
+    "description": "A PHP Client for the Billink API",
+    "keywords": [
+        "api",
+        "php",
+        "copernica",
+        "rest",
+        "plaza"
+    ],
+    "homepage": "https://github.com/avido/billink-api-php-client",
+    "license": "MIT",
+    "authors": [{
+        "name": "Sebastiaan Blaas",
+        "email": "sebastiaan@avido.nl"
+    }],
+    "require": {
+        "php": ">=5.6.0",
+        "guzzlehttp/guzzle": "^6.2",
+        "monolog/monolog": "^1.23"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Avido\\BillinkApiClient\\": "src/"
+        }
+    }
+}
