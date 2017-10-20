@@ -1,6 +1,7 @@
 <phpunit colors="true" strict="true" bootstrap="tests/autoload.php">
     <php>
-        <env name="PHP_ACCESS_TOKEN" value=""/>
+        <env name="PHP_USERNAME" value=""/>
+        <env name="PHP_CLIENTID" value=""/>
     </php>
     <testsuites>
         <testsuite name="The project's test suite">
