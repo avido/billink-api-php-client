@@ -1,14 +1,17 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
 
+use Avido\BillinkApiClient\BaseModel;
+
 /**
     @File: CreditCheck.php
     @version 0.1.0
     @Encoding:  UTF-8
-    @Package: Copernica Rest Api Client
+    @Package: Billink API Php Client
+    @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
-class CreditCheck extends BaseRequest
+class CreditCheck extends BaseModel
 {
     protected  $type;
     protected  $companyname;
@@ -43,6 +46,16 @@ class CreditCheck extends BaseRequest
         $this->chamberofcommerce = $chamberofcommerce;
         return $this;
     }
+    
+    /**
+     * Workflow number
+     * Options:
+            1: 14 Dagen Garantie Particulieren en Klein Zakelijk
+            2: 14 Dagen Groot Zakelijk
+            3: Geen garantie
+     * @param int $workflownumber
+     * @return $this
+     */
     public function setWorkflownumber($workflownumber)
     {
         $this->workflownumber = $workflownumber;

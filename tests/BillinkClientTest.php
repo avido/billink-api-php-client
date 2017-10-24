@@ -13,6 +13,7 @@ namespace Avido\BillinkApiClient;
 use PHPUnit\Framework\TestCase;
 use Avido\BillinkApiClient\BillinkClient;
 use Avido\BillinkApiClient\Request\CreditCheck;
+use Avido\BillinkApiClient\Exceptions\BillinkClientException;
 
 #use Avido\CopernicaRestClient\Exceptions\CopernicaRestClientBadResponseException;
 use Monolog\Handler\StreamHandler;
@@ -40,6 +41,7 @@ class BillinkClientTest extends TestCase
         // test with logger
 #        $handler = new StreamHandler(dirname(__FILE__) . '/../apiClient.log', \Monolog\Logger::DEBUG);
         $this->client = new BillinkClient($username, $client_id /*, $handler*/);
+        $this->client->setTestMode(true);
     }
 
     /**
@@ -55,17 +57,65 @@ class BillinkClientTest extends TestCase
         $check = new CreditCheck();
         $check->setType('P')
             ->setWorkflownumber(1)
-            ->setAction('check')
-            ->setFirstname('Voornaam')
-            ->setLastname('Achternaam')
-            ->setInitials('A')
+            ->setAction('Check')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
             ->setHousenumber(1)
-            ->setPostalcode('1111AA')
-            ->setPhonenumber('0123456789')
-            ->setBirthdate('01-01-1985')
-            ->setEmail('test@123.nl')
+            ->setHouseextension('a')
+            ->setPostalcode('1234AA')
+            ->setPhonenumber('0612345678')
+            ->setBirthdate('01-01-1980')
+            ->setEmail('gokyto@cars2.club')
             ->setOrderamount('120.09')
-            ->setIp('127.0.0.1');
+            ->setIp('127.0.0.1')
+            ->setBackdoor(1);
+        $response = $this->client->check($check);
+        $this->assertEquals(500, $response->getCode());
+    }
+    
+    public function testCreditCheckBillinkClientException()
+    {
+        $this->expectException(BillinkClientException::class);
+        $check = new CreditCheck();
+        $check->setType('P')
+            ->setWorkflownumber(1)
+            ->setAction('Check')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
+            ->setHousenumber(1)
+            ->setHouseextension('a')
+            ->setPostalcode('1234AA')
+            ->setPhonenumber('') // missing phonenumber
+            ->setBirthdate('01-01-1980')
+            ->setEmail('gokyto@cars2.club')
+            ->setOrderamount('120.09')
+            ->setIp('127.0.0.1')
+            ->setBackdoor(1);
         $this->client->check($check);
     }
+    
+    public function testCreditCheckRuntimeException()
+    {
+        $this->expectException(\RuntimeException::class);
+        $check = new CreditCheck();
+        $check->setType('P')
+            ->setWorkflownumber(100)
+            ->setAction('Check')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
+            ->setHousenumber(1)
+            ->setHouseextension('a')
+            ->setPostalcode('1234AA')
+            ->setPhonenumber('0123456789') // missing phonenumber
+            ->setBirthdate('01-01-1980')
+            ->setEmail('gokyto@cars2.club')
+            ->setOrderamount('120.09')
+            ->setIp('127.0.0.1')
+            ->setBackdoor(1);
+        $this->client->check($check);
+    }
+    
 }

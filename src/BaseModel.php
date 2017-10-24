@@ -1,15 +1,21 @@
 <?php
-namespace Avido\BillinkApiClient\Request;
+namespace Avido\BillinkApiClient;
 
 /**
-    @File: BaseRequest.php
+    @File: BaseModel.php
     @version 0.1.0
     @Encoding:  UTF-8
-    @Package: Copernica Rest Api Client
+    @Package: Billink API Php Client
     @copyright   Avido
 */
-class BaseRequest
+class BaseModel
 {
+    /**
+     * Return array of protected/public properties
+     * 
+     * @access public
+     * @return array
+     */
     public function toArray()
     {
         //Instantiate the reflection object
