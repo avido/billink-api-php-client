@@ -1,14 +1,17 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
 
+use Avido\BillinkApiClient\BaseModel;
+
 /**
     @File: CreditCheck.php
     @version 0.1.0
     @Encoding:  UTF-8
-    @Package: Copernica Rest Api Client
+    @Package: Billink API Php Client
+    @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
-class CreditCheck extends BaseRequest
+class CreditCheck extends BaseModel
 {
     protected  $type;
     protected  $companyname;

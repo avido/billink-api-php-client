@@ -2,10 +2,10 @@
 namespace Avido\BillinkApiClient\Response;
 
 /**
-    @File: CreditCheck.php
+    @File: CreditCheckResponse.php
     @version 0.1.0
     @Encoding:  UTF-8
-    @Package: Copernica Rest Api Client
+    @Package: Billink API Php Client
     @copyright   Avido
 */
 //extends BaseResponse

@@ -5,9 +5,8 @@
     "keywords": [
         "api",
         "php",
-        "copernica",
-        "rest",
-        "plaza"
+        "billink",
+        "xml"
     ],
     "homepage": "https://github.com/avido/billink-api-php-client",
     "license": "MIT",
