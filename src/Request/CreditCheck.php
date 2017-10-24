@@ -43,6 +43,16 @@ class CreditCheck extends BaseRequest
         $this->chamberofcommerce = $chamberofcommerce;
         return $this;
     }
+    
+    /**
+     * Workflow number
+     * Options:
+            1: 14 Dagen Garantie Particulieren en Klein Zakelijk
+            2: 14 Dagen Groot Zakelijk
+            3: Geen garantie
+     * @param int $workflownumber
+     * @return $this
+     */
     public function setWorkflownumber($workflownumber)
     {
         $this->workflownumber = $workflownumber;
