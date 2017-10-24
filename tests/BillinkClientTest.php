@@ -12,7 +12,7 @@ namespace Avido\BillinkApiClient;
 
 use PHPUnit\Framework\TestCase;
 use Avido\BillinkApiClient\BillinkClient;
-use Avido\BillinkApiClient\Request\CreditCheck;
+use Avido\BillinkApiClient\Request\CreditCheckRequest;
 use Avido\BillinkApiClient\Exceptions\BillinkClientException;
 
 #use Avido\CopernicaRestClient\Exceptions\CopernicaRestClientBadResponseException;
@@ -54,7 +54,7 @@ class BillinkClientTest extends TestCase
      */
     public function testCreditCheck()
     {
-        $check = new CreditCheck();
+        $check = new CreditCheckRequest();
         $check->setType('P')
             ->setWorkflownumber(1)
             ->setAction('Check')
@@ -77,7 +77,7 @@ class BillinkClientTest extends TestCase
     public function testCreditCheckBillinkClientException()
     {
         $this->expectException(BillinkClientException::class);
-        $check = new CreditCheck();
+        $check = new CreditCheckRequest();
         $check->setType('P')
             ->setWorkflownumber(1)
             ->setAction('Check')
@@ -99,7 +99,7 @@ class BillinkClientTest extends TestCase
     public function testCreditCheckRuntimeException()
     {
         $this->expectException(\RuntimeException::class);
-        $check = new CreditCheck();
+        $check = new CreditCheckRequest();
         $check->setType('P')
             ->setWorkflownumber(100)
             ->setAction('Check')
