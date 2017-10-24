@@ -162,7 +162,7 @@ class BillinkClient
      * @see https://www-dev.copernica.com/nl/documentation/rest-get-identity
      * @return array
      */
-    public function check(Request\CreditCheck $check)
+    public function check(Request\CreditCheckRequest $check)
     {
         // get data
         $data = $check->toArray();

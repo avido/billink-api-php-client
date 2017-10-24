@@ -11,7 +11,7 @@ use Avido\BillinkApiClient\BaseModel;
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
-class CreditCheck extends BaseModel
+class CreditCheckRequest extends BaseModel
 {
     protected  $type;
     protected  $companyname;
