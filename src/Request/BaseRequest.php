@@ -1,6 +1,7 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
 
+use SimpleXMLElement;
 use Avido\BillinkApiClient\BaseModel;
 /**
     @File: BaseRequest.php
@@ -31,7 +32,14 @@ class BaseRequest extends BaseModel
      *API Action
      * @var string 
      */
-    private $action = null;
+    protected $action = null;
+    
+    public function __construct($action=null)
+    {
+        if (!is_null($action)) {
+            $this->setAction($action);
+        }
+    }
     /**
      * Set API username
      * 
@@ -124,5 +132,38 @@ class BaseRequest extends BaseModel
     public function getAction()
     {
         return (string)$this->action;
+    }
+    
+    /**
+     * Output Request as Xml
+     * 
+     * @access public
+     * @return string (xml)
+     */
+    public function toXml()
+    {
+        $document = $this->prepXmlRequest();
+        foreach ($this->toArray() as $key=>$val) {
+            $document->addChild(strtoupper($key), $val);
+        }
+        #die($document->asXml());
+        return $document->asXml();
+    }
+    
+    /**
+     * Prep XML Request 
+     * 
+     * @access protected
+     * @return SimpleXMLElement
+     */
+    protected function prepXmlRequest()
+    {
+        $document = new SimpleXMLElement('<API></API>');
+            $document->addChild('VERSION', $this->getVersion());
+            $document->addChild('CLIENTUSERNAME', $this->getUsername());
+            $document->addChild('CLIENTID', $this->getClientId());
+            $document->addChild('ACTION', $this->getAction());
+        
+        return $document;
     }
 }

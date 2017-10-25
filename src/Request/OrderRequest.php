@@ -1,12 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
-
-
-use DOMDocument;
-use SimpleXMLElement;
-
-use Avido\BillinkApiClient\BaseModel;
-
 /**
     @File: OrderRequest.php
     @version 0.1.0
@@ -15,11 +8,11 @@ use Avido\BillinkApiClient\BaseModel;
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
-class OrderRequest extends BaseModel
+
+class OrderRequest extends BaseRequest
 {
     protected $companyname;
     protected $chamberofcommerce;
-    protected $action;
     protected $workflownumber;
     protected $ordernumber;
     protected $date;
@@ -55,7 +48,11 @@ class OrderRequest extends BaseModel
     protected $checkuuid;
     protected $orderitems = [];
 
-
+    public function __construct()
+    {
+        parent::__construct('Order');
+    }
+    
     public function setCompanyname($companyname)
     {
         $this->companyname = $companyname;
@@ -64,11 +61,6 @@ class OrderRequest extends BaseModel
     public function setChamberOfCommerce($chamberofcommerce)
     {
         $this->chamberofcommerce = $chamberofcommerce;
-        return $this;
-    }
-    public function setAction($action)
-    {
-        $this->action = $action;
         return $this;
     }
     public function setWorkflowNumber($workflownumber)
@@ -255,30 +247,23 @@ class OrderRequest extends BaseModel
     
     public function toXml()
     {
-        $document = new DOMDocument('1.0', 'UTF-8');
-        $api = $document->createElement('API');
-            $api->appendChild($document->createElement('VERSION', $this->getVersion()));
-            $api->appendChild($document->createElement('CLIENTUSERNAME', $this->getUsername()));
-            $api->appendChild($document->createElement('CLIENTID', $this->getClientId()));
+        $document = $this->prepXmlRequest();
             
-            // append data from request.
-            foreach ($this->toArray() as $key=>$val) {
-                if ($key == 'orderitems') {
-                    $items = $document->createElement('ORDERITEMS');
-                    foreach ($val as $item) {
-                        $childItem = $document->createElement('ITEM');
-                        foreach ($item->toArray() as $childKey => $childVal) {
-                            $childItem->appendChild($document->createElement(strtoupper($childKey), $childVal));
-                        }
-                        $items->appendChild($childItem);
+        // append data from request.
+        foreach ($this->toArray() as $key=>$val) {
+            if ($key == 'orderitems') {
+                $items = $document->addChild('ORDERITEMS');
+                foreach ($val as $item) {
+                    $childItem = $items->addChild('ITEM');
+                    foreach ($item->toArray() as $childKey => $childVal) {
+                        $childItem->addChild(strtoupper($childKey), $childVal);
                     }
-                    $api->appendChild($items);
-                } else {
-                    $api->appendChild($document->createElement(strtoupper($key), $val));
                 }
+            } else {
+                $document->addChild(strtoupper($key), $val);
             }
-        $document->appendChild($api);
-        $document->formatOutput = true;
-        return $document->saveXml();
+        }
+        
+        return $document->asXml();
     }
 }

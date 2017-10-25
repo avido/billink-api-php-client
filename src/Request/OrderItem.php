@@ -1,8 +1,6 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
 
-use DOMDocument;
-
 use Avido\BillinkApiClient\BaseModel;
 
 /**

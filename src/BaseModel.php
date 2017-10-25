@@ -2,7 +2,6 @@
 namespace Avido\BillinkApiClient;
 
 use SimpleXMLElement;
-use DOMDocument;
 
 /**
     @File: BaseModel.php
@@ -79,26 +78,5 @@ class BaseModel
         }
         
         return $arrData;
-    }
-    
-    /**
-     * Output Request as Xml
-     * 
-     * @access public
-     * @return string (xml)
-     */
-    public function toXml()
-    {
-        $document = new DOMDocument('1.0', 'UTF-8');
-        $api = $document->createElement('API');
-            $api->appendChild($document->createElement('VERSION', $this->getVersion()));
-            $api->appendChild($document->createElement('CLIENTUSERNAME', $this->getUsername()));
-            $api->appendChild($document->createElement('CLIENTID', $this->getClientId()));
-            foreach ($this->toArray() as $key=>$val) {
-                $api->appendChild($document->createElement(strtoupper($key), $val));
-            }
-        $document->appendChild($api);
-        $document->formatOutput = true;
-        return $document->saveXML();
     }
 }

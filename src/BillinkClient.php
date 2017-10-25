@@ -17,6 +17,7 @@ use Avido\BillinkApiClient\Exceptions\BillinkClientException;
 // entities
 //use Avido\CopernicaRestClient\Entities\Database;
 
+use SimpleXMLElement;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Exception\RequestException;
@@ -302,7 +303,7 @@ class BillinkClient
             ]);
             $res = $client->request($method, $endpoint, $payload);
             $response = $res->getBody()->getContents();
-            $xml = new \SimpleXMLElement($response);
+            $xml = new SimpleXMLElement($response);
             $this->checkErrors($xml);
             return $xml;
         } catch (RequestException $e) {
