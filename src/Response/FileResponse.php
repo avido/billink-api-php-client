@@ -30,4 +30,9 @@ class FileResponse extends BaseResponse
         $this->filename = $filename;
         return $this;
     }
+    
+    public function getFilename()
+    {
+        return ($this->filename != '') ? $this->filename : null;
+    }
 }
