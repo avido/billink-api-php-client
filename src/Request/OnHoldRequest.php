@@ -17,7 +17,7 @@ class OnHoldRequest extends BaseRequest
     
     public function __construct()
     {
-        parent::__construct('onhold');
+        parent::__construct('Onhold');
     }
     
     public function setWorkflowNumber($workflownumber)
