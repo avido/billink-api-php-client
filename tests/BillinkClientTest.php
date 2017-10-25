@@ -20,7 +20,7 @@ use Avido\BillinkApiClient\Request\StatusRequest;
 use Avido\BillinkApiClient\Request\WorkflowRequest;
 use Avido\BillinkApiClient\Request\CreditRequest;
 use Avido\BillinkApiClient\Request\PaymentRequest;
-use Avido\BillinkApiClient\Request\OnHoldRequest;
+use Avido\BillinkApiClient\Request\PaymentOnHoldRequest;
 
 // entities
 use Avido\BillinkApiClient\Entities\Invoice;
@@ -412,7 +412,7 @@ class BillinkClientTest extends TestCase
     public function testOnHold()
     {
         
-        $onHold = new Request\OnHoldRequest();
+        $onHold = new Request\PaymentOnHoldRequest();
         $onHold->setWorkflowNumber(1)
             ->setInvoiceNumber(1508935410);
         $response = $this->client->paymentOnHold($onHold);

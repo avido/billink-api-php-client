@@ -237,11 +237,11 @@ class BillinkClient
         return new Response\PaymentResponse($xml);
     }
     
-    public function paymentOnHold(Request\OnHoldRequest $order)
+    public function paymentOnHold(Request\PaymentOnHoldRequest $order)
     {
         $order = $this->prepare($order);
         $xml = $this->post('payment', $order->toXML());
-        return new Response\OnHoldResponse($xml);
+        return new Response\PaymentOnHoldResponse($xml);
     }
             
     

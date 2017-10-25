@@ -1,7 +1,7 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
 /**
-    @File: OnHoldRequest.php
+    @File: PaymentOnHoldRequest.php
     @version 0.1.0
     @Encoding:  UTF-8
     @Package: Billink API Php Client
@@ -9,7 +9,7 @@ namespace Avido\BillinkApiClient\Request;
     @copyright   Avido
 */
 
-class OnHoldRequest extends BaseRequest
+class PaymentOnHoldRequest extends BaseRequest
 {
     protected $workflownumber;
     protected $invoicenumber;
