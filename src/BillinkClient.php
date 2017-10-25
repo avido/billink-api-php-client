@@ -221,6 +221,22 @@ class BillinkClient
         return new Response\CreditResponse($xml);
     }
     
+    /***********************************
+     * Payment API
+     ***********************************/
+    /**
+     * Payment Request
+     *
+     * @see https://test.billink.nl/api/docs
+     * @return array
+     */
+    public function payment(Request\PaymentRequest $payment)
+    {
+        $payment = $this->prepare($payment);
+        $xml = $this->post('payment', $payment->toXml());
+        return new Response\PaymentResponse($xml);
+    }
+    
     
     
     
