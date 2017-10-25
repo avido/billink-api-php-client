@@ -5,6 +5,8 @@ namespace Avido\BillinkApiClient\Request;
 use DOMDocument;
 
 use Avido\BillinkApiClient\BaseModel;
+use Avido\BillinkApiClient\Entities\Invoice;
+
 
 /**
     @File: StatusRequest.php
