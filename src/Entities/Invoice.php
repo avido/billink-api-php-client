@@ -22,6 +22,9 @@ class Invoice extends BaseModel
     protected $message;
     // creditRequest
     protected $creditamount;
+    // payment Request
+    protected $amount;
+    
     
     public function __construct($data=null) {
         if (is_array($data)) {
@@ -45,6 +48,9 @@ class Invoice extends BaseModel
             }
             if (isset($data['creditamount'])) {
                 $this->setCreditAmount($data['creditamount']);
+            }
+            if (isset($data['amount'])) {
+                $this->setAmount($data['amount']);
             }
         }
     }
@@ -83,6 +89,11 @@ class Invoice extends BaseModel
         $this->creditamount = number_format($amount, 2, ".", ",");
         return $this;
     }
+    public function setAmount($amount)
+    {
+        $this->amount = number_format($amount, 2, ".", ",");
+        return $this;
+    }
     
     public function getWorkflowNumber()
     {
@@ -112,6 +123,10 @@ class Invoice extends BaseModel
     {
         return $this->creditamount;
     }
+    public function getAmount()
+    {
+        return $this->amount;
+    }
 
     public function toArray($filter=[]) {
         if (count($filter) > 0) {
@@ -121,12 +136,7 @@ class Invoice extends BaseModel
             }
             return $return;
         } else {
-            return [
-                'workflownumber' => $this->getWorkflowNumber(),
-                'invoicenumber' => $this->getInvoiceNumber(),
-                'status' => $this->getStatus(),
-                'description' => $this->getDescription()
-            ];
+            return parent::toArray();
         }
     }
 }

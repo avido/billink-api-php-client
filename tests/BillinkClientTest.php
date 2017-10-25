@@ -19,6 +19,7 @@ use Avido\BillinkApiClient\Request\OrderItem;
 use Avido\BillinkApiClient\Request\StatusRequest;
 use Avido\BillinkApiClient\Request\WorkflowRequest;
 use Avido\BillinkApiClient\Request\CreditRequest;
+use Avido\BillinkApiClient\Request\PaymentRequest;
 
 // entities
 use Avido\BillinkApiClient\Entities\Invoice;
@@ -383,5 +384,24 @@ class BillinkClientTest extends TestCase
         $response = $this->client->Credit($credit);
         $this->assertTrue(count($response->getInvoices()) >0);
     }
+    
+    /**
+     * Request Payment test
+     * 
+     * @group payment
+     * @xdepends testCreditCheck
+     */
+    public function testPayment()
+    {
+        
+        $payment = new PaymentRequest();
+        $payment->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410', 'amount' => 10.00, 'description' => 'payment test']))
+            ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305', 'amount' => 1.00, 'description' => 'payment test']));
+        $response = $this->client->Payment($payment);
+        echo "<pre>";
+        print_r($response);exit;
+        $this->assertTrue(count($response->getInvoices()) >0);
+    }
+        
         
 }
