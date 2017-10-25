@@ -255,7 +255,12 @@ class OrderRequest extends BaseRequest
                 $items = $document->addChild('ORDERITEMS');
                 foreach ($val as $item) {
                     $childItem = $items->addChild('ITEM');
-                    foreach ($item->toArray() as $childKey => $childVal) {
+                    if ($this->isBusiness()) {
+                        $fields = ['code', 'description', 'orderquantity', 'priceincl', 'btw'];
+                    } else {
+                        $fields = ['code', 'description', 'orderquantity', 'priceexcl', 'btw'];
+                    }
+                    foreach ($item->toArray($fields) as $childKey => $childVal) {
                         $childItem->addChild(strtoupper($childKey), $childVal);
                     }
                 }
@@ -265,5 +270,16 @@ class OrderRequest extends BaseRequest
         }
         
         return $document->asXml();
+    }
+    
+    /**
+     * Business 
+     * 
+     * @access public
+     * @return boolean
+     */
+    public function isBusiness()
+    {
+        return (bool)(strtoupper($this->type) == 'B') ? true : false;
     }
 }

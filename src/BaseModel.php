@@ -53,7 +53,7 @@ class BaseModel
      */
     public function getData($key=null)
     {
-        $data = $this->toArray();
+        $data = self::toArray();
         return isset($data[$key]) ? $data[$key] : null;
     }
     

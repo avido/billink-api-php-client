@@ -1,25 +1,23 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
-
-
-use Avido\BillinkApiClient\Entities\Invoice;
-
-
 /**
-    @File: StatusRequest.php
+    @File: CreditRequest.php
     @version 0.1.0
     @Encoding:  UTF-8
     @Package: Billink API Php Client
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
-class StatusRequest extends BaseRequest
+
+use Avido\BillinkApiClient\Entities\Invoice;
+
+class CreditRequest extends BaseRequest
 {
     protected $invoices = [];
 
     public function __construct()
     {
-        parent::__construct('Status');
+        parent::__construct('Credit');
     }
     
     /**
@@ -59,7 +57,7 @@ class StatusRequest extends BaseRequest
         $invoices = $document->addChild('INVOICES');
         foreach ($this->invoices as $invoice) {
             $childItem = $invoices->addChild('ITEM');
-            foreach ($invoice->toArray(['workflownumber', 'invoicenumber']) as $childKey => $childVal) {
+            foreach ($invoice->toArray(['workflownumber', 'invoicenumber', 'creditamount', 'description']) as $childKey => $childVal) {
                 $childItem->addChild(strtoupper($childKey), $childVal);
             }
         }

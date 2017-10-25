@@ -1,6 +1,7 @@
 <?php
 namespace Avido\BillinkApiClient\Entities;
 
+use Avido\BillinkApiClient\BaseModel;
 /**
     @File: Invoice.php
     @version 0.1.0
@@ -9,14 +10,18 @@ namespace Avido\BillinkApiClient\Entities;
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
-class Invoice
+class Invoice extends BaseModel
 {
+    // statusRequest
     protected $workflownumber;
     protected $invoicenumber;
     protected $status; // Status is used in StatusRequest, Code is used in WorkflowRequest (workflow start)
-    protected $code; 
     protected $description; // Description is used in StatusRequest, Message is used in WorkflowRequest (workflow start)
+    // workflowRequest
+    protected $code; 
     protected $message;
+    // creditRequest
+    protected $creditamount;
     
     public function __construct($data=null) {
         if (is_array($data)) {
@@ -37,6 +42,9 @@ class Invoice
             }
             if (isset($data['message'])) {
                 $this->setMessage($data['message']);
+            }
+            if (isset($data['creditamount'])) {
+                $this->setCreditAmount($data['creditamount']);
             }
         }
     }
@@ -70,6 +78,11 @@ class Invoice
         $this->message = $message;
         return $this;
     }
+    public function setCreditAmount($amount)
+    {
+        $this->creditamount = number_format($amount, 2, ".", ",");
+        return $this;
+    }
     
     public function getWorkflowNumber()
     {
@@ -95,13 +108,25 @@ class Invoice
     {
         return $this->message;
     }
+    public function getCreditAmount()
+    {
+        return $this->creditamount;
+    }
 
-    public function toArray() {
-        return [
-            'workflownumber' => $this->getWorkflowNumber(),
-            'invoicenumber' => $this->getInvoiceNumber(),
-            'status' => $this->getStatus(),
-            'description' => $this->getDescription()
-        ];
+    public function toArray($filter=[]) {
+        if (count($filter) > 0) {
+            $return = [];
+            foreach ($filter as $key) {
+                $return[$key] = $this->getData($key);
+            }
+            return $return;
+        } else {
+            return [
+                'workflownumber' => $this->getWorkflowNumber(),
+                'invoicenumber' => $this->getInvoiceNumber(),
+                'status' => $this->getStatus(),
+                'description' => $this->getDescription()
+            ];
+        }
     }
 }
