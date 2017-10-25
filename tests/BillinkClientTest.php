@@ -404,18 +404,35 @@ class BillinkClientTest extends TestCase
         
     
     /**
-     * Request OnHold test
+     * Request Payment OnHold test
      * 
      * @group onhold
      * @xdepends testCreditCheck
      */
-    public function testOnHold()
+    public function testPaymentOnHold()
     {
         
         $onHold = new Request\PaymentOnHoldRequest();
         $onHold->setWorkflowNumber(1)
             ->setInvoiceNumber(1508935410);
         $response = $this->client->paymentOnHold($onHold);
+        echo "<pre>";
+        print_r($response);exit;
+        $this->assertTrue(count($response->getInvoices()) >0);
+    }
+        
+    /**
+     * Request Payment Resume test
+     * 
+     * @group resume
+     * @xdepends testCreditCheck
+     */
+    public function testPaymentResume()
+    {
+        $paymentResume = new Request\PaymentResumeRequest();
+        $paymentResume->setWorkflowNumber(1)
+            ->setInvoiceNumber(1508935410);
+        $response = $this->client->paymentResume($paymentResume);
         echo "<pre>";
         print_r($response);exit;
         $this->assertTrue(count($response->getInvoices()) >0);
