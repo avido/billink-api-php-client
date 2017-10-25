@@ -367,4 +367,23 @@ class BillinkClientTest extends TestCase
         $this->client->startWorkflow($workflow);
     }
     
+    /**
+     * Request Credit test
+     * 
+     * @group credit
+     * @xdepends testCreditCheck
+     */
+    public function testCredit()
+    {
+        
+        $credit = new CreditRequest();
+        $credit->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410', 'creditamount' => 10.00, 'description' => 'credit test']));
+        #    ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305']));
+        $response = $this->client->Credit($credit);
+        echo "<pre>";
+        print_r($response);
+        exit;
+        $this->assertEquals(500, $response->getCode());
+    }
+        
 }

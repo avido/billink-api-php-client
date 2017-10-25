@@ -205,6 +205,22 @@ class BillinkClient
         return new Response\WorkflowResponse($xml);
     }
     
+    /***********************************
+     * Credit API
+     ***********************************/
+    /**
+     * Credit Request
+     *
+     * @see https://test.billink.nl/api/docs
+     * @return array
+     */
+    public function credit(Request\CreditRequest $credit)
+    {
+        $credit = $this->prepare($credit);
+        $xml = $this->post('credit', $check->toXml());
+        return new Response\CreditResponse($xml);
+    }
+    
     
     
     
