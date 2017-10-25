@@ -137,46 +137,39 @@ class BillinkClient
         return $this;
     }
     
-    /**
-     * Retrieve entity
-     * @param string $entity
-     * @param type $data
-     * @return \Avido\CopernicaRestClient\entity
-     * @throws Exceptions\CopernicaRestClientMissingEntityException
-     */
-    public function getEntity($entity, $data = null)
-    {
-        $entity = self::_NAMESPACE  . $entity;
-        if (!class_exists($entity)) {
-            throw new Exceptions\CopernicaRestClientMissingEntityException("No such entity '{$entity}'");
-        }
-        return new $entity($data);
-    }
-    
     /***********************************
      * Credit Check API
      ***********************************/
     /**
-     * Get Copernica Identity
+     * Request Credit Check
      *
-     * @see https://www-dev.copernica.com/nl/documentation/rest-get-identity
+     * @see https://test.billink.nl/api/docs
      * @return array
      */
     public function check(Request\CreditCheckRequest $check)
     {
-        // get data
-        $data = $check->toArray();
-        $document = new \SimpleXMLElement('<API></API>');
-        $document->addChild('VERSION', self::VERSION);
-        $document->addChild('CLIENTUSERNAME', $this->username);
-        $document->addChild('CLIENTID', $this->client_id);
-        // append data from request.
-        foreach ($data as $key=>$val) {
-            $document->addChild(strtoupper($key), $val);
-        }
-        $xml = $this->post('check', $document->asXML());
+        $check = $this->prepare($check);
+        $xml = $this->post('check', $check->toXml());
         return new Response\CreditCheckResponse($xml);
     }
+    
+    /***********************************
+     * Order API
+     ***********************************/
+    /**
+     * Request Order 
+     *
+     * @see https://test.billink.nl/api/docs
+     * @return array
+     */
+    public function simpleOrder(Request\OrderRequest $order)
+    {
+        // get data
+        $order = $this->prepare($order);
+        $xml = $this->post('order', $order->toXML());
+        return new Response\OrderResponse($xml);
+    }
+    
     
     
     
@@ -329,5 +322,21 @@ class BillinkClient
             $endpoint = "/{$endpoint}";
         }
         return (($this->testMode) ? self::API_ADDRESS_TEST : self::API_ADDRESS_LIVE) . $endpoint;
+    }
+    
+    /**
+     * Prepare request object with username, client id & version
+     * 
+     * @access private
+     * @param request object $request
+     * @return request object
+     */
+    private function prepare($request)
+    {
+        // get data
+        $request->setVersion(self::VERSION)
+            ->setUsername($this->username)
+            ->setClientId($this->client_id);
+        return $request;
     }
 }
