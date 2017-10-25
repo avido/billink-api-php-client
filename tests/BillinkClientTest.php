@@ -398,8 +398,6 @@ class BillinkClientTest extends TestCase
         $payment->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410', 'amount' => 10.00, 'description' => 'payment test']))
             ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305', 'amount' => 1.00, 'description' => 'payment test']));
         $response = $this->client->Payment($payment);
-        echo "<pre>";
-        print_r($response);exit;
         $this->assertTrue(count($response->getInvoices()) >0);
     }
         
