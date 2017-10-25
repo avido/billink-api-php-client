@@ -266,6 +266,22 @@ class BillinkClient
         $xml = $this->post('file', $file->toXml());
         return new Response\FileResponse($xml);
     }
+            
+    /***********************************
+     * Message API
+     ***********************************/
+    /**
+     * Message Request
+     *
+     * @see https://test.billink.nl/api/docs
+     * @return array
+     */
+    public function message(Request\MessageRequest $message)
+    {
+        $message = $this->prepare($message);
+        $xml = $this->post('message', $message->toXml());
+        return new Response\MessageResponse($xml);
+    }
     
     
     

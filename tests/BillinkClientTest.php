@@ -455,4 +455,19 @@ class BillinkClientTest extends TestCase
         $this->assertNotNull($response->getFilename());
     }
         
+    /**
+     * Request Message test
+     * 
+     * @group message
+     * @xdepends testCreditCheck
+     */
+    public function testMessage()
+    {
+        $messageRequest = new Request\MessageRequest();
+        $messageRequest->setWorkflowNumber(1)
+            ->setInvoiceNumber(1508935410)
+            ->setMessage('Message test 1234');
+        $response = $this->client->message($messageRequest);
+        $this->assertEquals(200, $response->getCode());        
+    }
 }
