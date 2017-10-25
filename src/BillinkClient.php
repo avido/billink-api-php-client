@@ -170,6 +170,23 @@ class BillinkClient
         return new Response\OrderResponse($xml);
     }
     
+    /***********************************
+     * Status API
+     ***********************************/
+    /**
+     * Request Status 
+     *
+     * @see https://test.billink.nl/api/docs
+     * @return array
+     */
+    public function status(Request\StatusRequest $status)
+    {
+        // get data
+        $status = $this->prepare($status);
+        $xml = $this->post('status', $status->toXML());
+        return new Response\StatusResponse($xml);
+    }
+    
     
     
     
