@@ -21,6 +21,7 @@ use Avido\BillinkApiClient\Request\WorkflowRequest;
 use Avido\BillinkApiClient\Request\CreditRequest;
 use Avido\BillinkApiClient\Request\PaymentRequest;
 use Avido\BillinkApiClient\Request\PaymentOnHoldRequest;
+use Avido\BillinkApiClient\Request\FileRequest;
 
 // entities
 use Avido\BillinkApiClient\Entities\Invoice;
@@ -438,5 +439,20 @@ class BillinkClientTest extends TestCase
         $this->assertTrue(count($response->getInvoices()) >0);
     }
         
+        
+    /**
+     * Request File (PDF) test
+     * 
+     * @group file
+     * @xdepends testCreditCheck
+     */
+    public function testFile()
+    {
+        $fileRequest = new Request\FileRequest();
+        $fileRequest->setWorkflowNumber(1)
+            ->setInvoiceNumber(1508935410);
+        $response = $this->client->file($fileRequest);
+        $this->assertNotNull($response->getFilename());
+    }
         
 }
