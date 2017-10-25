@@ -2,14 +2,14 @@
 namespace Avido\BillinkApiClient\Response;
 
 /**
-    @File: CreditCheckResponse.php
+    @File: OrderResponse.php
     @version 0.1.0
     @Encoding:  UTF-8
     @Package: Billink API Php Client
     @copyright   Avido
 */
 //extends BaseResponse
-class CreditCheckResponse extends BaseResponse
+class OrderResponse extends BaseResponse
 {
     protected  $uuid;
     
@@ -18,7 +18,6 @@ class CreditCheckResponse extends BaseResponse
         if ($xml instanceof \SimpleXMLElement) {
             $this->setCode((string)$xml->MSG->CODE);
             $this->setDescription ((string)$xml->MSG->DESCRIPTION);
-            $this->setUuId((string)$xml->UUID);
         }
     }
     public function setCode($code)
@@ -30,15 +29,5 @@ class CreditCheckResponse extends BaseResponse
     {
         $this->description = $description;
         return $this;
-    }
-    public function setUuid($uuid)
-    {
-        $this->uuid = $uuid;
-        return $this;
-    }
-    
-    public function getUuid()
-    {
-        return $this->uuid;
     }
 }
