@@ -11,12 +11,16 @@ namespace Avido\BillinkApiClient\Entities;
 */
 class Invoice
 {
+    // statusRequest
     protected $workflownumber;
     protected $invoicenumber;
     protected $status; // Status is used in StatusRequest, Code is used in WorkflowRequest (workflow start)
-    protected $code; 
     protected $description; // Description is used in StatusRequest, Message is used in WorkflowRequest (workflow start)
+    // workflowRequest
+    protected $code; 
     protected $message;
+    // creditRequest
+    protected $creditamount;
     
     public function __construct($data=null) {
         if (is_array($data)) {
@@ -37,6 +41,9 @@ class Invoice
             }
             if (isset($data['message'])) {
                 $this->setMessage($data['message']);
+            }
+            if (isset($data['creditamount'])) {
+                $this->setCreditAmount($data['creditamount']);
             }
         }
     }
@@ -70,6 +77,11 @@ class Invoice
         $this->message = $message;
         return $this;
     }
+    public function setCreditAmount($amount)
+    {
+        $this->creditamount = number_format($amount, 2, ".", ",");
+        return $this;
+    }
     
     public function getWorkflowNumber()
     {
@@ -94,6 +106,10 @@ class Invoice
     public function getMessage()
     {
         return $this->message;
+    }
+    public function getCreditAmount()
+    {
+        return $this->creditamount;
     }
 
     public function toArray() {
