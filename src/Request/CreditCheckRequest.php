@@ -1,8 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
-
-use Avido\BillinkApiClient\BaseModel;
-
 /**
     @File: CreditCheck.php
     @version 0.1.0
@@ -11,13 +8,13 @@ use Avido\BillinkApiClient\BaseModel;
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
-class CreditCheckRequest extends BaseModel
+
+class CreditCheckRequest extends BaseRequest
 {
     protected  $type;
     protected  $companyname;
     protected  $chamberofcommerce;
     protected  $workflownumber;
-    protected  $action;
     protected  $firstname;
     protected  $lastname;
     protected  $initials;
@@ -30,6 +27,11 @@ class CreditCheckRequest extends BaseModel
     protected  $orderamount;
     protected  $ip;
     protected  $backdoor;
+    
+    public function __construct() 
+    {
+        parent::__construct('Check');
+    }
     
     public function setType($type)
     {
@@ -59,11 +61,6 @@ class CreditCheckRequest extends BaseModel
     public function setWorkflownumber($workflownumber)
     {
         $this->workflownumber = $workflownumber;
-        return $this;
-    }
-    public function setAction($action)
-    {
-        $this->action = $action;
         return $this;
     }
     public function setFirstname($firstname)

@@ -58,6 +58,7 @@ class BillinkClientTest extends TestCase
     /**
      * Test Request Credit Check
      * 
+     * @group single
      * @group creditcheck
      * @group order
      */
@@ -66,7 +67,6 @@ class BillinkClientTest extends TestCase
         $check = new CreditCheckRequest();
         $check->setType('P')
             ->setWorkflownumber(1)
-            ->setAction('Check')
             ->setFirstname('T')
             ->setLastname('Test')
             ->setInitials('T')
@@ -90,7 +90,6 @@ class BillinkClientTest extends TestCase
         $check = new CreditCheckRequest();
         $check->setType('P')
             ->setWorkflownumber(1)
-            ->setAction('Check')
             ->setFirstname('T')
             ->setLastname('Test')
             ->setInitials('T')
@@ -112,7 +111,6 @@ class BillinkClientTest extends TestCase
         $check = new CreditCheckRequest();
         $check->setType('P')
             ->setWorkflownumber(100)
-            ->setAction('Check')
             ->setFirstname('T')
             ->setLastname('Test')
             ->setInitials('T')
@@ -141,7 +139,6 @@ class BillinkClientTest extends TestCase
         $checkUuid = $uuid;
         $order = new OrderRequest();
         $order->setWorkflownumber(1)
-            ->setAction('Order')
             ->setOrdernumber($order_id)
             ->setDate(date("Y-m-d"))
             ->setType('P')
@@ -220,7 +217,6 @@ class BillinkClientTest extends TestCase
         $checkUuid = 'unkown-uuid-' . time();
         $order = new OrderRequest();
         $order->setWorkflownumber(1)
-            ->setAction('Order')
             ->setOrdernumber($order_id)
             ->setDate(date("Y-m-d"))
             ->setType('P')
@@ -273,7 +269,6 @@ class BillinkClientTest extends TestCase
         $checkUuid = $uuid;
         $order = new OrderRequest();
         $order->setWorkflownumber(1)
-            ->setAction('Order')
             ->setOrdernumber($order_id)
             ->setDate(date("Y-m-d"))
             ->setType('P')
