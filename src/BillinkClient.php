@@ -251,6 +251,22 @@ class BillinkClient
         return new Response\PaymentResumeResponse($xml);
     }
             
+    /***********************************
+     * File API
+     ***********************************/
+    /**
+     * File(pdf) Request
+     *
+     * @see https://test.billink.nl/api/docs
+     * @return array
+     */
+    public function file(Request\FileRequest $file)
+    {
+        $file = $this->prepare($file);
+        $xml = $this->post('file', $file->toXml());
+        return new Response\FileResponse($xml);
+    }
+    
     
     
     
