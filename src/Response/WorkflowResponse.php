@@ -32,8 +32,8 @@ class WorkflowResponse extends BaseResponse
         foreach ($invoices->ITEM as $invoice) {
             $tmp[] = new Invoice([
                 'invoicenumber' => (string)$invoice->INVOICENUMBER,
-                'status' => (string)$invoice->CODE,
-                'description' => (string)$invoice->MESSAGE
+                'code' => (string)$invoice->CODE,
+                'message' => (string)$invoice->MESSAGE
             ]);
         }
         $this->invoices = $tmp;

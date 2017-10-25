@@ -17,6 +17,8 @@ use Avido\BillinkApiClient\Request\CreditCheckRequest;
 use Avido\BillinkApiClient\Request\OrderRequest;
 use Avido\BillinkApiClient\Request\OrderItem;
 use Avido\BillinkApiClient\Request\StatusRequest;
+use Avido\BillinkApiClient\Request\WorkflowRequest;
+
 // entities
 use Avido\BillinkApiClient\Entities\Invoice;
 
@@ -335,5 +337,34 @@ class BillinkClientTest extends TestCase
         $this->expectException(BillinkClientException::class);
         $status = new StatusRequest();
         $this->client->status($status);
-    }        
+    }
+    
+    /**
+     * Request Workflow Start test
+     * 
+     * @group workflow
+     * @xdepends testCreditCheck
+     */
+    public function testWorkflowStart()
+    {
+        
+        $workflow = new WorkflowRequest();
+        $workflow->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410']))
+            ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305']));
+        $response = $this->client->startWorkflow($workflow);
+        $this->assertEquals(500, $response->getCode());
+    }
+        
+    /**
+     * Request Status  Exception, no invoices provided test
+     * 
+     * @group workflow
+     */
+    public function testWorkflowStartMissingInvoicesClientException()
+    {
+        $this->expectException(BillinkClientException::class);
+        $workflow = new WorkflowRequest();
+        $this->client->startWorkflow($workflow);
+    }
+    
 }
