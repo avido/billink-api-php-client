@@ -244,6 +244,13 @@ class BillinkClient
         return new Response\PaymentOnHoldResponse($xml);
     }
             
+    public function paymentResume(Request\PaymentResumeRequest $order)
+    {
+        $order = $this->prepare($order);
+        $xml = $this->post('payment', $order->toXML());
+        return new Response\PaymentResumeResponse($xml);
+    }
+            
     
     
     
