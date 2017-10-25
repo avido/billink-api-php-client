@@ -20,6 +20,7 @@ use Avido\BillinkApiClient\Request\StatusRequest;
 use Avido\BillinkApiClient\Request\WorkflowRequest;
 use Avido\BillinkApiClient\Request\CreditRequest;
 use Avido\BillinkApiClient\Request\PaymentRequest;
+use Avido\BillinkApiClient\Request\PaymentOnHoldRequest;
 
 // entities
 use Avido\BillinkApiClient\Entities\Invoice;
@@ -398,6 +399,40 @@ class BillinkClientTest extends TestCase
         $payment->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410', 'amount' => 10.00, 'description' => 'payment test']))
             ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305', 'amount' => 1.00, 'description' => 'payment test']));
         $response = $this->client->Payment($payment);
+        $this->assertTrue(count($response->getInvoices()) >0);
+    }
+        
+    
+    /**
+     * Request Payment OnHold test
+     * 
+     * @group onhold
+     * @xdepends testCreditCheck
+     */
+    public function testPaymentOnHold()
+    {
+        
+        $onHold = new Request\PaymentOnHoldRequest();
+        $onHold->setWorkflowNumber(1)
+            ->setInvoiceNumber(1508935410);
+        $response = $this->client->paymentOnHold($onHold);
+        echo "<pre>";
+        print_r($response);exit;
+        $this->assertTrue(count($response->getInvoices()) >0);
+    }
+        
+    /**
+     * Request Payment Resume test
+     * 
+     * @group resume
+     * @xdepends testCreditCheck
+     */
+    public function testPaymentResume()
+    {
+        $paymentResume = new Request\PaymentResumeRequest();
+        $paymentResume->setWorkflowNumber(1)
+            ->setInvoiceNumber(1508935410);
+        $response = $this->client->paymentResume($paymentResume);
         echo "<pre>";
         print_r($response);exit;
         $this->assertTrue(count($response->getInvoices()) >0);

@@ -32,7 +32,7 @@ class BaseRequest extends BaseModel
      *API Action
      * @var string 
      */
-    protected $action = null;
+    private $action = null;
     
     public function __construct($action=null)
     {
