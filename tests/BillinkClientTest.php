@@ -12,9 +12,14 @@ namespace Avido\BillinkApiClient;
 
 use PHPUnit\Framework\TestCase;
 use Avido\BillinkApiClient\BillinkClient;
+// requests
 use Avido\BillinkApiClient\Request\CreditCheckRequest;
 use Avido\BillinkApiClient\Request\OrderRequest;
 use Avido\BillinkApiClient\Request\OrderItem;
+use Avido\BillinkApiClient\Request\StatusRequest;
+// entities
+use Avido\BillinkApiClient\Entities\Invoice;
+
 
 
 use Avido\BillinkApiClient\Exceptions\BillinkClientException;
@@ -308,4 +313,32 @@ class BillinkClientTest extends TestCase
         ]));
         $this->client->simpleOrder($order);
     }
+    
+    /**
+     * Request Status test
+     * 
+     * @group status
+     * @xdepends testCreditCheck
+     */
+    public function testStatus()
+    {
+        
+        $status = new StatusRequest();
+        $status->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508925794']))
+            ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '150892576912']));
+        $response = $this->client->status($status);
+        $this->assertTrue(count($response->getInvoices()) >0);
+    }
+        
+    /**
+     * Request Status  Exception, no invoices provided test
+     * 
+     * @group status
+     */
+    public function testStatusMissingInvoicesClientException()
+    {
+        $this->expectException(BillinkClientException::class);
+        $status = new StatusRequest();
+        $this->client->status($status);
+    }        
 }
