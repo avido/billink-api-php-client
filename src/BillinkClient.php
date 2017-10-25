@@ -188,6 +188,23 @@ class BillinkClient
         return new Response\StatusResponse($xml);
     }
     
+    /***********************************
+     * Workflow API
+     ***********************************/
+    /**
+     * Start workflow
+     *
+     * @see https://test.billink.nl/api/docs
+     * @return array
+     */
+    public function startWorkflow(Request\WorkflowRequest $workflow)
+    {
+        // get data
+        $workflow = $this->prepare($workflow);
+        $xml = $this->post('start-workflow', $workflow->toXML());
+        return new Response\WorkflowResponse($xml);
+    }
+    
     
     
     

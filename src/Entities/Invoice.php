@@ -13,8 +13,10 @@ class Invoice
 {
     protected $workflownumber;
     protected $invoicenumber;
-    protected $status;
-    protected $description;
+    protected $status; // Status is used in StatusRequest, Code is used in WorkflowRequest (workflow start)
+    protected $code; 
+    protected $description; // Description is used in StatusRequest, Message is used in WorkflowRequest (workflow start)
+    protected $message;
     
     public function __construct($data=null) {
         if (is_array($data)) {
@@ -27,8 +29,14 @@ class Invoice
             if (isset($data['status'])) {
                 $this->setStatus($data['status']);
             }
+            if (isset($data['code'])) {
+                $this->setCode($data['code']);
+            }
             if (isset($data['description'])) {
                 $this->setDescription($data['description']);
+            }
+            if (isset($data['message'])) {
+                $this->setMessage($data['message']);
             }
         }
     }
@@ -47,9 +55,19 @@ class Invoice
         $this->status = $status;
         return $this;
     }
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
+    }
     public function setDescription($description)
     {
         $this->description = $description;
+        return $this;
+    }
+    public function setMessage($message)
+    {
+        $this->message = $message;
         return $this;
     }
     
@@ -65,9 +83,17 @@ class Invoice
     {
         return $this->status;
     }
+    public function getCode()
+    {
+        return $this->code;
+    }
     public function getDescription()
     {
         return $this->description;
+    }
+    public function getMessage()
+    {
+        return $this->message;
     }
 
     public function toArray() {
