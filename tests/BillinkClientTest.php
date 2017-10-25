@@ -18,6 +18,7 @@ use Avido\BillinkApiClient\Request\OrderRequest;
 use Avido\BillinkApiClient\Request\OrderItem;
 use Avido\BillinkApiClient\Request\StatusRequest;
 use Avido\BillinkApiClient\Request\WorkflowRequest;
+use Avido\BillinkApiClient\Request\CreditRequest;
 
 // entities
 use Avido\BillinkApiClient\Entities\Invoice;
@@ -377,13 +378,10 @@ class BillinkClientTest extends TestCase
     {
         
         $credit = new CreditRequest();
-        $credit->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410', 'creditamount' => 10.00, 'description' => 'credit test']));
-        #    ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305']));
+        $credit->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410', 'creditamount' => 10.00, 'description' => 'credit test']))
+            ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305', 'creditamount' => 1.00, 'description' => 'credit test']));
         $response = $this->client->Credit($credit);
-        echo "<pre>";
-        print_r($response);
-        exit;
-        $this->assertEquals(500, $response->getCode());
+        $this->assertTrue(count($response->getInvoices()) >0);
     }
         
 }

@@ -59,7 +59,7 @@ class StatusRequest extends BaseRequest
         $invoices = $document->addChild('INVOICES');
         foreach ($this->invoices as $invoice) {
             $childItem = $invoices->addChild('ITEM');
-            foreach ($invoice->toArray() as $childKey => $childVal) {
+            foreach ($invoice->toArray(['workflownumber', 'invoicenumber']) as $childKey => $childVal) {
                 $childItem->addChild(strtoupper($childKey), $childVal);
             }
         }

@@ -57,7 +57,7 @@ class CreditRequest extends BaseRequest
         $invoices = $document->addChild('INVOICES');
         foreach ($this->invoices as $invoice) {
             $childItem = $invoices->addChild('ITEM');
-            foreach ($invoice->toArray() as $childKey => $childVal) {
+            foreach ($invoice->toArray(['workflownumber', 'invoicenumber', 'creditamount', 'description']) as $childKey => $childVal) {
                 $childItem->addChild(strtoupper($childKey), $childVal);
             }
         }

@@ -217,7 +217,7 @@ class BillinkClient
     public function credit(Request\CreditRequest $credit)
     {
         $credit = $this->prepare($credit);
-        $xml = $this->post('credit', $check->toXml());
+        $xml = $this->post('credit', $credit->toXml());
         return new Response\CreditResponse($xml);
     }
     

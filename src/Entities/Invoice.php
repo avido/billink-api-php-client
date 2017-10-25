@@ -1,6 +1,7 @@
 <?php
 namespace Avido\BillinkApiClient\Entities;
 
+use Avido\BillinkApiClient\BaseModel;
 /**
     @File: Invoice.php
     @version 0.1.0
@@ -9,7 +10,7 @@ namespace Avido\BillinkApiClient\Entities;
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
-class Invoice
+class Invoice extends BaseModel
 {
     // statusRequest
     protected $workflownumber;
@@ -112,12 +113,20 @@ class Invoice
         return $this->creditamount;
     }
 
-    public function toArray() {
-        return [
-            'workflownumber' => $this->getWorkflowNumber(),
-            'invoicenumber' => $this->getInvoiceNumber(),
-            'status' => $this->getStatus(),
-            'description' => $this->getDescription()
-        ];
+    public function toArray($filter=[]) {
+        if (count($filter) > 0) {
+            $return = [];
+            foreach ($filter as $key) {
+                $return[$key] = $this->getData($key);
+            }
+            return $return;
+        } else {
+            return [
+                'workflownumber' => $this->getWorkflowNumber(),
+                'invoicenumber' => $this->getInvoiceNumber(),
+                'status' => $this->getStatus(),
+                'description' => $this->getDescription()
+            ];
+        }
     }
 }
