@@ -25,6 +25,10 @@ use Monolog\Handler\NullHandler;
 
 class BillinkClient
 {
+    // billinkClient version
+    const LIBVERSION = '0.1.0';
+    
+    // api version
     const VERSION = 'BILLINK2.0';
     
     /**
@@ -394,6 +398,9 @@ class BillinkClient
             $client = new \GuzzleHttp\Client([
                 'handler' => $stack
             ]);
+            $payload['headers'] = [
+                'User-Agent' => 'Avido/Billink-Api-Client-' . self::LIBVERSION
+            ];
             $res = $client->request($method, $endpoint, $payload);
             $response = $res->getBody()->getContents();
             $xml = new SimpleXMLElement($response);
