@@ -1,6 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
-
 /**
     @File: FileResponse.php
     @version 0.1.0

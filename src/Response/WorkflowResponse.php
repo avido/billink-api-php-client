@@ -1,7 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
-
-use Avido\BillinkApiClient\Entities\Invoice;
 /**
     @File: WorkflowResponse.php
     @version 0.1.0
@@ -9,7 +7,9 @@ use Avido\BillinkApiClient\Entities\Invoice;
     @Package: Billink API Php Client
     @copyright   Avido
 */
-//extends BaseResponse
+
+use Avido\BillinkApiClient\Entities\Invoice;
+
 class WorkflowResponse extends BaseResponse
 {
     protected $invoices = [];

@@ -1,7 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
-
-use Avido\BillinkApiClient\Entities\Invoice;
 /**
     @File: CreditResponse.php
     @version 0.1.0
@@ -9,6 +7,9 @@ use Avido\BillinkApiClient\Entities\Invoice;
     @Package: Billink API Php Client
     @copyright   Avido
 */
+
+use Avido\BillinkApiClient\Entities\Invoice;
+
 class CreditResponse extends BaseResponse
 {
     protected $invoices = [];

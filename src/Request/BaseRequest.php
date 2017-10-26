@@ -1,8 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
-
-use SimpleXMLElement;
-use Avido\BillinkApiClient\BaseModel;
 /**
     @File: BaseRequest.php
     @version 0.1.0
@@ -10,6 +7,10 @@ use Avido\BillinkApiClient\BaseModel;
     @Package: Billink API Php Client
     @copyright   Avido
 */
+
+use SimpleXMLElement;
+use Avido\BillinkApiClient\BaseModel;
+
 class BaseRequest extends BaseModel
 {
     /**
