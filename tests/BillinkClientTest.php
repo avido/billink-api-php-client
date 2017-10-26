@@ -105,6 +105,15 @@ class BillinkClientTest extends TestCase
     
     /**
      * Test Credit check runtimeexception
+     * @group order
+     * @group status
+     * @group workflow
+     * @group credit
+     * @group payment
+     * @group onhold
+     * @group resume
+     * @group file
+     * @group message
      * @group creditcheck
      */
     public function testCreditCheckRuntimeException()
@@ -145,7 +154,7 @@ class BillinkClientTest extends TestCase
     public function testOrder($uuid)
     {
         // echo "Running test order with uuid: {$uuid}\n";
-        $order_id = time();
+        $order_id = floor(time() * (rand(0,1000)/100*10));
         $checkUuid = $uuid;
         $order = new OrderRequest();
         $order->setWorkflownumber(1)
@@ -413,11 +422,10 @@ class BillinkClientTest extends TestCase
     {
         $onHold = new Request\PaymentOnHoldRequest();
         $onHold->setWorkflowNumber(1)
-            ->setInvoiceNumber($order_id);
+            ->setInvoiceNumber($order_id)
+            ->setDays(3);
         $response = $this->client->paymentOnHold($onHold);
-        echo "<pre>";
-        print_r($response);exit;
-        $this->assertTrue(count($response->getInvoices()) >0);
+        $this->assertEquals(200, $response->getCode());        
     }
         
     /**
@@ -432,9 +440,7 @@ class BillinkClientTest extends TestCase
         $paymentResume->setWorkflowNumber(1)
             ->setInvoiceNumber($order_id);
         $response = $this->client->paymentResume($paymentResume);
-        echo "<pre>";
-        print_r($response);exit;
-        $this->assertTrue(count($response->getInvoices()) >0);
+        $this->assertEquals(200, $response->getCode());        
     }
         
         
