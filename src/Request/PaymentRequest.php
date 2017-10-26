@@ -50,6 +50,12 @@ class PaymentRequest extends BaseRequest
         return $this;
     }
     
+    /**
+     * Output object as xml
+     * 
+     * @access public
+     * @return string
+     */
     public function toXml()
     {
         $document = $this->prepXmlRequest();

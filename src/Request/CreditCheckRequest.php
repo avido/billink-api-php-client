@@ -123,5 +123,4 @@ class CreditCheckRequest extends BaseRequest
         $this->backdoor = $backdoor;
         return $this;
     }
-
 }

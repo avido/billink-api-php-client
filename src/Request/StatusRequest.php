@@ -1,10 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
-
-
-use Avido\BillinkApiClient\Entities\Invoice;
-
-
 /**
     @File: StatusRequest.php
     @version 0.1.0
@@ -13,6 +8,9 @@ use Avido\BillinkApiClient\Entities\Invoice;
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
+
+use Avido\BillinkApiClient\Entities\Invoice;
+
 class StatusRequest extends BaseRequest
 {
     protected $invoices = [];
@@ -52,6 +50,12 @@ class StatusRequest extends BaseRequest
         return $this;
     }
     
+    /**
+     * Output object as xml
+     * 
+     * @access public
+     * @return string
+     */
     public function toXml()
     {
         $document = $this->prepXmlRequest();

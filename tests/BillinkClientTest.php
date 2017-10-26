@@ -1,4 +1,5 @@
 <?php
+namespace Avido\BillinkApiClient;
 /**
     @File: BillinkClientTest.php
     @version 0.1.0
@@ -8,7 +9,6 @@
 
     Several unit tests for the Billink API PHP CLIENT
 */
-namespace Avido\BillinkApiClient;
 
 use PHPUnit\Framework\TestCase;
 use Avido\BillinkApiClient\BillinkClient;
@@ -26,11 +26,8 @@ use Avido\BillinkApiClient\Request\FileRequest;
 // entities
 use Avido\BillinkApiClient\Entities\Invoice;
 
-
-
 use Avido\BillinkApiClient\Exceptions\BillinkClientException;
 
-#use Avido\CopernicaRestClient\Exceptions\CopernicaRestClientBadResponseException;
 use Monolog\Handler\StreamHandler;
 
 
@@ -40,14 +37,6 @@ class BillinkClientTest extends TestCase
      * @var Avido\BillinkApiClient\BillinkClient
      */
     private $client;
-
-    /**
-     * 
-     * Caching placeholder (key/values)
-     * 
-     * @var array
-     */
-    private $cache = []; 
     
     public function setUp()
     {
@@ -58,13 +47,12 @@ class BillinkClientTest extends TestCase
         // test with logger
 #        $handler = new StreamHandler(dirname(__FILE__) . '/../apiClient.log', \Monolog\Logger::DEBUG);
         $this->client = new BillinkClient($username, $client_id /*, $handler*/);
-        $this->client->setTestMode(true);
+        $this->client->setTestMode(true); // enforce test mode
     }
 
     /**
      * Test Request Credit Check
      * 
-     * @group single
      * @group creditcheck
      * @group order
      */
@@ -90,6 +78,10 @@ class BillinkClientTest extends TestCase
         return $response->getUuid();
     }
     
+    /**
+     * Test Credit check exception (missing phonenumber)
+     * @group creditcheck
+     */
     public function testCreditCheckBillinkClientException()
     {
         $this->expectException(BillinkClientException::class);
@@ -111,6 +103,10 @@ class BillinkClientTest extends TestCase
         $this->client->check($check);
     }
     
+    /**
+     * Test Credit check runtimeexception
+     * @group creditcheck
+     */
     public function testCreditCheckRuntimeException()
     {
         $this->expectException(\RuntimeException::class);
@@ -136,6 +132,14 @@ class BillinkClientTest extends TestCase
      * Request Order test
      * 
      * @group order
+     * @group status
+     * @group workflow
+     * @group credit
+     * @group payment
+     * @group onhold
+     * @group resume
+     * @group file
+     * @group message
      * @depends testCreditCheck
      */
     public function testOrder($uuid)
@@ -319,14 +323,13 @@ class BillinkClientTest extends TestCase
      * Request Status test
      * 
      * @group status
-     * @xdepends testCreditCheck
+     * @depends testOrder
      */
-    public function testStatus()
+    public function testStatus($order_id)
     {
         
         $status = new StatusRequest();
-        $status->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508925794']))
-            ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '150892576912']));
+        $status->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => $order_id]));
         $response = $this->client->status($status);
         $this->assertTrue(count($response->getInvoices()) >0);
     }
@@ -347,14 +350,12 @@ class BillinkClientTest extends TestCase
      * Request Workflow Start test
      * 
      * @group workflow
-     * @xdepends testCreditCheck
+     * @depends testOrder
      */
-    public function testWorkflowStart()
+    public function testWorkflowStart($order_id)
     {
-        
         $workflow = new WorkflowRequest();
-        $workflow->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410']))
-            ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305']));
+        $workflow->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => $order_id]));
         $response = $this->client->startWorkflow($workflow);
         $this->assertEquals(500, $response->getCode());
     }
@@ -375,14 +376,13 @@ class BillinkClientTest extends TestCase
      * Request Credit test
      * 
      * @group credit
-     * @xdepends testCreditCheck
+     * @depends testOrder
      */
-    public function testCredit()
+    public function testCredit($order_id)
     {
         
         $credit = new CreditRequest();
-        $credit->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410', 'creditamount' => 10.00, 'description' => 'credit test']))
-            ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305', 'creditamount' => 1.00, 'description' => 'credit test']));
+        $credit->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => $order_id, 'creditamount' => 10.00, 'description' => 'credit test']));
         $response = $this->client->Credit($credit);
         $this->assertTrue(count($response->getInvoices()) >0);
     }
@@ -391,14 +391,13 @@ class BillinkClientTest extends TestCase
      * Request Payment test
      * 
      * @group payment
-     * @xdepends testCreditCheck
+     * @depends testOrder
      */
-    public function testPayment()
+    public function testPayment($order_id)
     {
         
         $payment = new PaymentRequest();
-        $payment->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => '1508935410', 'amount' => 10.00, 'description' => 'payment test']))
-            ->addInvoice(new Invoice(['workflownumber' => 1, 'invoicenumber' => '1508935305', 'amount' => 1.00, 'description' => 'payment test']));
+        $payment->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => $order_id, 'amount' => 10.00, 'description' => 'payment test']));
         $response = $this->client->Payment($payment);
         $this->assertTrue(count($response->getInvoices()) >0);
     }
@@ -408,14 +407,13 @@ class BillinkClientTest extends TestCase
      * Request Payment OnHold test
      * 
      * @group onhold
-     * @xdepends testCreditCheck
+     * @depends testOrder
      */
-    public function testPaymentOnHold()
+    public function testPaymentOnHold($order_id)
     {
-        
         $onHold = new Request\PaymentOnHoldRequest();
         $onHold->setWorkflowNumber(1)
-            ->setInvoiceNumber(1508935410);
+            ->setInvoiceNumber($order_id);
         $response = $this->client->paymentOnHold($onHold);
         echo "<pre>";
         print_r($response);exit;
@@ -426,13 +424,13 @@ class BillinkClientTest extends TestCase
      * Request Payment Resume test
      * 
      * @group resume
-     * @xdepends testCreditCheck
+     * @depends testOrder
      */
-    public function testPaymentResume()
+    public function testPaymentResume($order_id)
     {
         $paymentResume = new Request\PaymentResumeRequest();
         $paymentResume->setWorkflowNumber(1)
-            ->setInvoiceNumber(1508935410);
+            ->setInvoiceNumber($order_id);
         $response = $this->client->paymentResume($paymentResume);
         echo "<pre>";
         print_r($response);exit;
@@ -444,13 +442,13 @@ class BillinkClientTest extends TestCase
      * Request File (PDF) test
      * 
      * @group file
-     * @xdepends testCreditCheck
+     * @depends testOrder
      */
-    public function testFile()
+    public function testFile($order_id)
     {
         $fileRequest = new Request\FileRequest();
         $fileRequest->setWorkflowNumber(1)
-            ->setInvoiceNumber(1508935410);
+            ->setInvoiceNumber($order_id);
         $response = $this->client->file($fileRequest);
         $this->assertNotNull($response->getFilename());
     }
@@ -459,14 +457,14 @@ class BillinkClientTest extends TestCase
      * Request Message test
      * 
      * @group message
-     * @xdepends testCreditCheck
+     * @depends testOrder
      */
-    public function testMessage()
+    public function testMessage($order_id)
     {
         $messageRequest = new Request\MessageRequest();
         $messageRequest->setWorkflowNumber(1)
-            ->setInvoiceNumber(1508935410)
-            ->setMessage('Message test 1234');
+            ->setInvoiceNumber($order_id)
+            ->setMessage('UnitTest Message test 1234');
         $response = $this->client->message($messageRequest);
         $this->assertEquals(200, $response->getCode());        
     }

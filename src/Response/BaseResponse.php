@@ -1,7 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
-
-use Avido\BillinkApiClient\BaseModel;
 /**
     @File: BaseResponse.php
     @version 0.1.0
@@ -9,6 +7,9 @@ use Avido\BillinkApiClient\BaseModel;
     @Package: Billink API Php Client
     @copyright   Avido
 */
+
+use Avido\BillinkApiClient\BaseModel;
+
 class BaseResponse extends BaseModel
 {
     protected  $code;

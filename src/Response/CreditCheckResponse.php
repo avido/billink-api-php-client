@@ -1,6 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
-
 /**
     @File: CreditCheckResponse.php
     @version 0.1.0
@@ -8,7 +7,7 @@ namespace Avido\BillinkApiClient\Response;
     @Package: Billink API Php Client
     @copyright   Avido
 */
-//extends BaseResponse
+
 class CreditCheckResponse extends BaseResponse
 {
     protected  $uuid;

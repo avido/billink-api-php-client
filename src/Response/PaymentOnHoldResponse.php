@@ -1,6 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
-
 /**
     @File: PaymentOnHoldResponse.php
     @version 0.1.0

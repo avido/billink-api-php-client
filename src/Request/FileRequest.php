@@ -1,10 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
-
-
-use Avido\BillinkApiClient\Entities\Invoice;
-
-
 /**
     @File: FileRequest.php
     @version 0.1.0

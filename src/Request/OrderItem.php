@@ -1,8 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Request;
-
-use Avido\BillinkApiClient\BaseModel;
-
 /**
     @File: OrderItem.php
     @version 0.1.0
@@ -11,6 +8,9 @@ use Avido\BillinkApiClient\BaseModel;
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
+
+use Avido\BillinkApiClient\BaseModel;
+
 class OrderItem extends BaseModel
 {
     protected $code;

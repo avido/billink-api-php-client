@@ -14,9 +14,6 @@ namespace Avido\BillinkApiClient;
 
 use Avido\BillinkApiClient\Exceptions\BillinkClientException;
 
-// entities
-//use Avido\CopernicaRestClient\Entities\Database;
-
 use SimpleXMLElement;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -369,8 +366,10 @@ class BillinkClient
      * @param string $endpoint
      * @param string $payload
      * @return mixed
-     * @throws CopernicaRestClientBadResponseException
-     * @throws \Avido\CopernicaRestClient\GuzzleHttp\Exception\ClientException
+     * @throws BadMethodCallException
+     * @throws ClientException
+     * @throws RequestException
+     * @throws Exception
      */
     public function makeRequest($method = 'GET', $endpoint = '', $payload=null)
     {
@@ -379,12 +378,6 @@ class BillinkClient
         }
         try {
             // create stack middleware
-            /**
-             * Middleware currently hijacks response body..
-             * Untill issue is fixed.. disabled middleware (6.3.0)
-             * 
-             * @see https://github.com/guzzle/guzzle/issues/1582
-             */
             $stack = HandlerStack::create();
 //            $stack->push(
 //                Middleware::log(
@@ -392,7 +385,12 @@ class BillinkClient
 //                    new MessageFormatter($this->logMessageFormat)
 //                )
 //            );
-            // guzzle(6.3.0) still hijacks body when adding stack handler..
+            /**
+             * Middleware currently hijacks response body..
+             * Untill issue is fixed.. disabled middleware (6.3.0)
+             * 
+             * @see https://github.com/guzzle/guzzle/issues/1582
+             */
             $client = new \GuzzleHttp\Client([
                 'handler' => $stack
             ]);
@@ -410,6 +408,14 @@ class BillinkClient
         }
     }
     
+    /**
+     * Check if response xml is error container
+     * 
+     * @access private
+     * @param string $xml
+     * @throws \RuntimeException
+     * @throws BillinkClientException
+     */
     private function checkErrors($xml)
     {
         if ($xml->ERROR) {

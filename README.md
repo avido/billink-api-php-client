@@ -11,18 +11,26 @@ Run the command:
 ```
 composer require avido/billink-api-php-client
 ```
+## client initialization: 
 
-| # | Omschrijving |
-|:---:|---|
-|✓|Done|
-|✓✓|Done & (Unit) Tested|
-|✗|Open|
-|-|Done but issues|
-|s|Skipped
+```php
+require __DIR__ . '/vendor/autoload.php';
+$username = '--YOUR USERNAME--';
+$client_id = '--YOUR CLIENT ID--';
+$client = new BillinkClient($username, $client_id);
+// test mode true|false
+$client->setTestMode(true);
+```
 
-
-
-| # | Call | Omschrijving |
-|:---:|---|---|
+## Unit tests
+```xml
+<phpunit>
+  ...
+    <php>
+        <env name="PHP_USERNAME" value="--YOUR USERNAME--"/>
+        <env name="PHP_CLIENTID" value="--YOUR CLIENT ID--"/>
+    </php>
+</phpunit>
+```
 
 See the tests folder for more information and examples

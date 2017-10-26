@@ -1,7 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Entities;
-
-use Avido\BillinkApiClient\BaseModel;
 /**
     @File: Invoice.php
     @version 0.1.0
@@ -10,6 +8,9 @@ use Avido\BillinkApiClient\BaseModel;
     @see https://test.billink.nl/api/docs
     @copyright   Avido
 */
+
+use Avido\BillinkApiClient\BaseModel;
+
 class Invoice extends BaseModel
 {
     // statusRequest

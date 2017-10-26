@@ -1,6 +1,5 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
-
 /**
     @File: OrderResponse.php
     @version 0.1.0
@@ -8,7 +7,6 @@ namespace Avido\BillinkApiClient\Response;
     @Package: Billink API Php Client
     @copyright   Avido
 */
-//extends BaseResponse
 class OrderResponse extends BaseResponse
 {
     protected  $uuid;
