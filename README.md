@@ -15,6 +15,7 @@ composer require avido/billink-api-php-client
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
+use Avido\BillinkApiClient\BillinkClient;
 $username = '--YOUR USERNAME--';
 $client_id = '--YOUR CLIENT ID--';
 $client = new BillinkClient($username, $client_id);
