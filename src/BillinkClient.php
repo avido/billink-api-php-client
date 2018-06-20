@@ -25,18 +25,23 @@ use Monolog\Handler\NullHandler;
 
 class BillinkClient
 {
-    // billinkClient version
+    /**
+     * BillinkClient Version
+     */
     const LIBVERSION = '0.1.0';
     
-    // api version
+    /**
+     * Billink API Version
+     */
     const VERSION = 'BILLINK2.0';
     
     /**
      * Namespace for loading entities
      */
     const _NAMESPACE = "Avido\\BillinkApiClient\\Request\\";
+    
     /**
-     * API Address
+     * API Endpoints
      */
     const API_ADDRESS_LIVE = 'https://client.billink.nl/api';
     const API_ADDRESS_TEST = 'https://test.billink.nl/api';
@@ -72,8 +77,20 @@ class BillinkClient
      */
     private $logger = null;
 
+    /**
+     *Log message format
+     * @var string
+     */
     private $logMessageFormat = "[{method}] - {uri} *|* <<REQUEST>> {req_body} *|* <<RESPONSE>> {res_body}";
     
+    /**
+     * Construct Billink API Client
+     * 
+     * @see https://test.billink.nl/api/docs
+     * @param string $username
+     * @param string  $client_id
+     * @param mixed Monolog\Handler|null $logger
+     */
     public function __construct($username, $client_id, $logger=null)
     {
         $this->username = $username;
@@ -84,17 +101,22 @@ class BillinkClient
     
     /**
      * Enable or disable testmode (default disabled)
-     * @param $mode boolean
+     * 
+     * @access public
+     * @param boolean $mode
+     * @return $this
      */
     public function setTestMode($mode)
     {
         $this->testMode = (bool)$mode;
+        return $this;
     }
 
     
     /**
      * Set logger
      * 
+     * @access public
      * @param Monolog\Handler $handler
      * @return $this
      */
@@ -110,6 +132,8 @@ class BillinkClient
     
     /**
      * Get Logger
+     * 
+     * @access public
      * @return Monolog\Logger
      */
     public function getLogger()
@@ -121,9 +145,16 @@ class BillinkClient
         }
         return $this->logger;
     }
+    
+    /**
+     * Check for defined logger
+     * 
+     * @access public
+     * @return boolean
+     */
     public function hasLogger()
     {
-        return !is_null($this->logger) ? true : false;
+        return (bool)!is_null($this->logger) ? true : false;
     }
     
     /**
@@ -146,7 +177,10 @@ class BillinkClient
      * Request Credit Check
      *
      * @see https://test.billink.nl/api/docs
-     * @return array
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\CreditCheckRequest $check
+     * @return \Avido\BillinkApiClient\Response\CreditCheckResponse
      */
     public function check(Request\CreditCheckRequest $check)
     {
@@ -162,7 +196,10 @@ class BillinkClient
      * Request Order 
      *
      * @see https://test.billink.nl/api/docs
-     * @return array
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\OrderRequest $order
+     * @return \Avido\BillinkApiClient\Response\OrderResponse
      */
     public function simpleOrder(Request\OrderRequest $order)
     {
@@ -179,7 +216,10 @@ class BillinkClient
      * Request Status 
      *
      * @see https://test.billink.nl/api/docs
-     * @return array
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\StatusRequest $status
+     * @return \Avido\BillinkApiClient\Response\StatusResponse
      */
     public function status(Request\StatusRequest $status)
     {
@@ -196,7 +236,10 @@ class BillinkClient
      * Start workflow
      *
      * @see https://test.billink.nl/api/docs
-     * @return array
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\WorkflowRequest $workflow
+     * @return \Avido\BillinkApiClient\Response\WorkflowResponse
      */
     public function startWorkflow(Request\WorkflowRequest $workflow)
     {
@@ -213,7 +256,10 @@ class BillinkClient
      * Credit Request
      *
      * @see https://test.billink.nl/api/docs
-     * @return array
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\CreditRequest $credit
+     * @return \Avido\BillinkApiClient\Response\CreditResponse
      */
     public function credit(Request\CreditRequest $credit)
     {
@@ -229,7 +275,10 @@ class BillinkClient
      * Payment Request
      *
      * @see https://test.billink.nl/api/docs
-     * @return array
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\PaymentRequest $payment
+     * @return \Avido\BillinkApiClient\Response\PaymentResponse
      */
     public function payment(Request\PaymentRequest $payment)
     {
@@ -238,13 +287,31 @@ class BillinkClient
         return new Response\PaymentResponse($xml);
     }
     
+    /**
+     * Set Order on hold
+     * 
+     * @see https://test.billink.nl/api/docs
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\PaymentOnHoldRequest $order
+     * @return \Avido\BillinkApiClient\Response\PaymentOnHoldResponse
+     */
     public function paymentOnHold(Request\PaymentOnHoldRequest $order)
     {
         $order = $this->prepare($order);
         $xml = $this->post('on-hold', $order->toXML());
         return new Response\PaymentOnHoldResponse($xml);
     }
-            
+      
+    /**
+     * Resume Payment (order/resume)
+     * 
+     * @see https://test.billink.nl/api/docs
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\PaymentResumeRequest $order
+     * @return \Avido\BillinkApiClient\Response\PaymentResumeResponse
+     */
     public function paymentResume(Request\PaymentResumeRequest $order)
     {
         $order = $this->prepare($order);
@@ -259,7 +326,10 @@ class BillinkClient
      * File(pdf) Request
      *
      * @see https://test.billink.nl/api/docs
-     * @return array
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\FileRequest $file
+     * @return \Avido\BillinkApiClient\Response\FileResponse
      */
     public function file(Request\FileRequest $file)
     {
@@ -275,7 +345,10 @@ class BillinkClient
      * Message Request
      *
      * @see https://test.billink.nl/api/docs
-     * @return array
+     * 
+     * @access public
+     * @param \Avido\BillinkApiClient\Request\MessageRequest $message
+     * @return \Avido\BillinkApiClient\Response\MessageResponse
      */
     public function message(Request\MessageRequest $message)
     {
@@ -283,19 +356,22 @@ class BillinkClient
         $xml = $this->post('message', $message->toXml());
         return new Response\MessageResponse($xml);
     }
-    
-    
-    
+
+
+    /**
+     * Internal API Calls
+     */
     
     /**
      * Get request
      *
+     * @access private
      * @param string $endpoint
      * @param array $parameters
      * @param boolean $rawReturn (true, skip json decode)
      * @return array
      */
-    public function get($endpoint = '', array $parameters = [], $rawReturn = false)
+    private function get($endpoint = '', array $parameters = [], $rawReturn = false)
     {
         if ($endpoint === '') {
             throw new \BadMethodCallException("Missing endpoint");
@@ -308,11 +384,13 @@ class BillinkClient
 
     /**
      * Post request
+     * 
+     * @access private
      * @param string $endpoint
      * @param string $xml
      * @return mixed Int($id) | false
      */
-    public function post($endpoint = '', $xml=null)
+    private function post($endpoint = '', $xml=null)
     {
         if ($endpoint === '') {
             throw new \BadMethodCallException("Missing endpoint");
@@ -322,50 +400,9 @@ class BillinkClient
     }
 
     /**
-     * Put request
-     *
-     * @param string $endpoint
-     * @param array $data
-     * @return boolean
-     */
-    public function put($endpoint = '', array $data = [], $parameters = [])
-    {
-        if ($endpoint === '') {
-            throw new \BadMethodCallException("Missing endpoint");
-        }
-        $endpoint = $this->endpoint($endpoint, $parameters);
-        $res =  $this->setExpectedStatusCode()->makeRequest('PUT', $endpoint, ['json' => $data]);
-        return $res;
-    }
-
-    /**
-     * Delete request
-     *
-     * @param string $endpoint
-     * @return boolean
-     */
-    public function delete($endpoint = '', $parameters = [])
-    {
-        if ($endpoint === '') {
-            throw new \BadMethodCallException("Missing endpoint");
-        }
-        $endpoint = $this->endpoint($endpoint, $parameters);
-        $res = $this->makeRequest('DELETE', $endpoint);
-//        echo "Response:";
-//        var_dump($res->getBody()->getContents());
-//        exit;
-        $xDeleted = $res->getHeaderLine('X-Deleted');
-        if ($xDeleted !== '') {
-            // extract id from X-Deleted
-            $id = preg_replace('[\D]', '', $xDeleted);
-        }
-        // return id if present, if response code differs from 200 an exception is thrown
-        return ($id > 0) ? intval($id) : true;        
-    }
-        
-    /**
      * Make http request
      *
+     * @access private
      * @param string $method - GET,POST,PUT,DELETE
      * @param string $endpoint
      * @param string $payload
@@ -375,7 +412,7 @@ class BillinkClient
      * @throws RequestException
      * @throws Exception
      */
-    public function makeRequest($method = 'GET', $endpoint = '', $payload=null)
+    private function makeRequest($method = 'GET', $endpoint = '', $payload=null)
     {
         if ($endpoint === '') {
             throw new \BadMethodCallException("Missing endpoint");
@@ -383,12 +420,13 @@ class BillinkClient
         try {
             // create stack middleware
             $stack = HandlerStack::create();
-//            $stack->push(
-//                Middleware::log(
-//                    $this->getLogger(),
-//                    new MessageFormatter($this->logMessageFormat)
-//                )
-//            );
+            $stack->push(
+                Middleware::log(
+                    $this->getLogger(),
+                    new MessageFormatter($this->logMessageFormat)
+                )
+            );
+            
             /**
              * Middleware currently hijacks response body..
              * Untill issue is fixed.. disabled middleware (6.3.0)
