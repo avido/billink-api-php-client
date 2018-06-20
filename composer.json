@@ -20,7 +20,8 @@
         "monolog/monolog": "^1.23"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "twig/twig": "1.35.3"
     },
     "autoload": {
         "psr-4": {

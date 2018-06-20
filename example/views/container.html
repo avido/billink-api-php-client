@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Billink Examples</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css' integrity='sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB' crossorigin='anonymous'>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom:50px;">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Credit check</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=requestOrder">Request Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=requestStatusOrder">Request Status Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=startWorkflow">Start workflow</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=orderCredit">Add order credit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=orderPayment">Add order payment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=orderHold">Hold order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=orderResume">Resume order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=orderFile">Order file (invoice pdf)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?v=orderMessage">Add message to order</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+        
+        <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49' crossorigin='anonymous'></script>
+        <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js' integrity='sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T' crossorigin='anonymous'></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+    <script type="text/javascript">
+        $(function() {
+                $('pre div').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                });
+            });
+    </script>
+        
+    </body>
+</html>

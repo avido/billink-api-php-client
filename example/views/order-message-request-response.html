@@ -1,0 +1,38 @@
+{% extends 'container.html' %}
+
+{% import 'form.html' as form %}
+
+{% block content %}
+    <h1>Order message</h1>
+    <form action="/?v=orderMessage" method="POST">
+        {{ form.input('invoicenumber', 'Invoicenumber', invoicenumber, {helpblock: ''}) }}
+        {{ form.input('workflownumber', 'Workflownumber', workflownumber, {helpblock: ''}) }}
+        {{ form.textarea('message', 'Message', '', {helpblock:''}) }}
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Add message to order</button>
+        </div>
+    </form>
+    
+    {% if code != null %}
+    <h1>Order Message Response</h1>
+    
+    <table class="table table-striped table-bordered">
+        <tr>
+            <td>Code</td>
+            <td>{{code}}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{description}}</td>
+        </tr>
+    </table>
+    <br />
+    <pre>
+        <div class="xml">
+            {{request}}
+        </div>
+    </pre>
+    
+    {% endif %} 
+{% endblock %}

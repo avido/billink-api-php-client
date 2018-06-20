@@ -1,0 +1,121 @@
+{% extends 'container.html' %}
+
+{% import 'form.html' as form %}
+
+{% block content %}
+    <h1>Request Order</h1>
+    <p>
+        Please note, maximum order amount (total order lines) must not exceed: {{orderamount}}
+    </p>
+    <form action="?v=runRequestOrder" method="POST">
+        {{ form.input('checkuuid', 'UUID', uuid, {helpblock:'P for B2B, B for B2B'}) }}
+        {{ form.input('type', 'Type', 'P', {helpblock:'P for B2B, B for B2B'}) }}
+        {{ form.input('companyname', 'Companyame', '', {helpblock: 'mandatory B2B'}) }}
+        {{ form.input('chamberofcommerce', 'Chamber of commerce', '', {helpblock:'mandatory B2B'}) }}
+        {{ form.input('workflownumber', 'Workflownumber', '1', {helpblock:'1,2 or 3'}) }}
+ 
+        
+       {{ form.input('ordernumber', 'Ordernumber', ordernumber, {helpblock:''}) }}
+       {{ form.input('date', 'Date', date, {helpblock:'dd-mm-YYYY'}) }}
+       {{ form.input('firstname', 'Firstname', 'Test', {helpblock:'Min 2 chars'}) }}
+       {{ form.input('initials', 'Initials', 't.e.s.t', {helpblock:'Optional, max 6 chars'}) }}
+       {{ form.input('lastname', 'Lastname', 'MrTest', {helpblock:''}) }}
+       {{ form.input('sex', 'Sex', 'M', {helpblock:'Mandatory for B2C, options: M|F'}) }}
+       {{ form.input('street', 'Street', 'Street', {helpblock:''}) }}
+       {{ form.input('housenumber', 'Housenumber', '28', {helpblock:''}) }}
+       {{ form.input('houseextension', 'Housenumber extension', 'A', {helpblock:''}) }}
+       {{ form.input('postalcode', 'Postalcode', '1111XX', {helpblock:''}) }}
+       {{ form.input('countrycode', 'Countrycode', 'NL', {helpblock:''}) }}
+       {{ form.input('city', 'City', 'Amsterdam', {helpblock:''}) }}
+       {{ form.input('phonenumber', 'Phonenumber', '0612345678', {helpblock:''}) }}
+       {{ form.input('birthdate', 'Birthdate', '01-01-1980', {helpblock:'Mandatory for B2C, format: dd-mm-YYYY'}) }}
+       {{ form.input('email', 'Email', email, {helpblock:''}) }}
+       {{ form.input('email2', 'Email 2', '', {helpblock:'optional'}) }}
+       {{ form.input('ip', 'Ip', '127.0.0.1', {helpblock:''}) }}
+       {{ form.input('aditionaltext', 'Aditional text', '', {helpblock:'Optional'}) }}
+       {{ form.input('trackandtrace', 'Trackandtrace', '', {helpblock:'Optional'}) }}
+       {{ form.input('variable1', 'Variable1', '', {helpblock:'Optional'}) }}
+       {{ form.input('variable2', 'Variable2', '', {helpblock:'Optional'}) }}
+       {{ form.input('variable3', 'Variable3', '', {helpblock:'Optional'}) }}
+       {{ form.input('vatnumber', 'Vatnumber', '', {helpblock:'optional'}) }}
+       {{ form.input('debtornumber', 'Debtornumber', '', {helpblock:'optional'}) }}
+       {{ form.input('currency', 'Currency', 'EUR', {helpblock:''}) }}
+       {{ form.input('state', 'State', '', {helpblock:'optional'}) }}
+       {{ form.input('locality', 'Locality', '', {helpblock:'optional'}) }}
+         
+        <div class="items" style="padding-bottom:50px;">
+            <h2>Items</h2>
+            <div class="inner">
+                <div class="row">
+                    <div class="col">
+                        {{ form.input('item[0][code]', 'Code', '0001', {helpblock:'Invoice item code'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[0][description]', 'Description', 'Product 0001', {helpblock:'Invoice description'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[0][orderquantity]', 'Quantity', '1', {helpblock:'Quantity'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[0][priceincl]', 'Price (incl vat)', '10.25', {helpblock:'Mandatory for B2C, decimal format: 10.25'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[0][priceexcl]', 'Price (ex vat)', '', {helpblock:'Mandatory for B2B, decimal format: 10.25'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[0][vat]', 'Vat', '1.21', {helpblock:"Vat: possible values: ('20', '1.20', '21', '1.21', '19', '1.19', '7', '1.07', '6', '1.06', '0' or '1.0 )"}) }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        {{ form.input('item[1][code]', 'Code', '0002', {helpblock:'Invoice item code'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[1][description]', 'Description', 'Product 0002', {helpblock:'Invoice description'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[1][orderquantity]', 'Quantity', '2', {helpblock:'Quantity'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[1][priceincl]', 'Price (incl vat)', '4.85', {helpblock:'Mandatory for B2C, decimal format: 10.25'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[1][priceexcl]', 'Price (ex vat)', '', {helpblock:'Mandatory for B2B, decimal format: 10.25'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[1][vat]', 'Vat', '1.21', {helpblock:"Vat: possible values: ('20', '1.20', '21', '1.21', '19', '1.19', '7', '1.07', '6', '1.06', '0' or '1.0 )"}) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        {{ form.input('item[2][code]', 'Code', '0003', {helpblock:'Invoice item code'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[2][description]', 'Description', 'Product 0003', {helpblock:'Invoice description'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[2][orderquantity]', 'Quantity', '3', {helpblock:'Quantity'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[2][priceincl]', 'Price (incl vat)', '10.15', {helpblock:'Mandatory for B2C, decimal format: 10.25'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[2][priceexcl]', 'Price (ex vat)', '', {helpblock:'Mandatory for B2B, decimal format: 10.25'}) }}
+                    </div>
+                    <div class="col">
+                        {{ form.input('item[2][vat]', 'Vat', '1.21', {helpblock:"Vat: possible values: ('20', '1.20', '21', '1.21', '19', '1.19', '7', '1.07', '6', '1.06', '0' or '1.0 )"}) }}
+                    </div>
+                </div>
+                
+            </div>
+            <!--<button type="button" class="btn btn-light add-item">Add item</button>-->
+        </div>
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Request Order</button> <a href="/">Start new creditcheck</a>
+        </div>
+    </form>
+{% endblock %}
+

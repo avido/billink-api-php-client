@@ -1,0 +1,46 @@
+{% extends 'container.html' %}
+
+{% import 'form.html' as form %}
+
+{% block content %}
+    <h1>Start order workflow request</h1>
+    <form action="/?v=startWorkflow" method="POST">
+        {{ form.input('workflownumber', 'Workflownumber', workflownumber, {helpblock:''}) }}
+        {{ form.input('invoicenumber', 'Invoicenumber', invoicenumber, {helpblock: ''}) }}
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Start Order Workflow</button>
+        </div>
+    </form>
+    
+    {% if invoices != null %}
+    <h1>Start Order Workflow Request Response</h1>
+    
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Invoicenumber</th>
+                <th>Status</th>
+                <th>Code</th>
+<!--                <th>Action</th>-->
+            </tr>
+        </thead>
+        <tbody>
+    {% for invoice in invoices %}
+        <tr>
+            <td>{{invoice.invoicenumber}}</td>
+            <td>{{invoice.message}}</td>
+            <td>{{invoice.code}}</td>
+            <!--<td><a href="/?v=startWorkflow&invoicenumber={{invoice.invoicenumber}}&workflownumber={{invoice.workflownumber}}">Start workflow</a></td>-->
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    <br />
+    <pre>
+        <div class="xml">
+            {{request}}
+        </div>
+    </pre>
+    
+    {% endif %} 
+{% endblock %}

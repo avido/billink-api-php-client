@@ -1,0 +1,25 @@
+{% extends 'container.html' %}
+
+{% block content %}
+    <h1>Order Request Response</h1>
+    
+    <table class="table table-striped table-bordered">
+        <tr>
+            <td>Code</td>
+            <td>{{code}}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{description}}</td>
+        </tr>
+    </table>
+    <br />
+    Next step: <a href="/?v=requestStatusOrder&invoicenumber={{invoicenumber}}&workflownumber={{workflownumber}}">View order status</a>
+    <br />
+    <pre>
+        <div class="xml">
+            {{request}}
+        </div>
+    </pre>
+    
+{% endblock %}
