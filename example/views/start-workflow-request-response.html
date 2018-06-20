@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Start order workflow request</h1>
     <form action="/?v=startWorkflow" method="POST">
-        {{ form.input('workflownumber', 'Workflownumber', workflownumber, {helpblock:''}) }}
+        {{ form.workflow(workflownumber) }}
         {{ form.input('invoicenumber', 'Invoicenumber', invoicenumber, {helpblock: ''}) }}
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Start Order Workflow</button>

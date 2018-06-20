@@ -6,7 +6,7 @@
     <h1>Hold order</h1>
     <form action="/?v=orderHold" method="POST">
         {{ form.input('invoicenumber', 'Invoicenumber', invoicenumber, {helpblock: ''}) }}
-        {{ form.input('workflownumber', 'Workflownumber', workflownumber, {helpblock: ''}) }}
+        {{ form.workflow() }}
         {{ form.input('days', 'Days on hold', '', {helpblock:'Max 14 days.'}) }}
         
         

@@ -13,3 +13,15 @@
         <p class="help-block">{{options.helpblock}}</p>
     </div>
 {% endmacro %}
+
+{% macro workflow(value = null) %}
+    <div class="form-group">
+        <label for="workflow"> Workflow</label>
+        <select name="workflownumber" class="form-control">
+            <option value="1" {% if value == 1 %}selected{% endif %} >1: 14 days warranty Consumer/(small) Business</option>
+            <option value="2" {% if value == 2 %}selected{% endif %} >2: 14 days business</option>
+            <option value="3" {% if value == 3 %}selected{% endif %} >3: No warranty</option>
+        </select>
+    </div>
+{% endmacro %}
+
