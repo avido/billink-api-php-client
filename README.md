@@ -16,9 +16,13 @@ composer require avido/billink-api-php-client
 ```php
 require __DIR__ . '/vendor/autoload.php';
 use Avido\BillinkApiClient\BillinkClient;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 $username = '--YOUR USERNAME--';
 $client_id = '--YOUR CLIENT ID--';
-$client = new BillinkClient($username, $client_id);
+$log = new StreamHandler('billink.log', LOGGER::DEBUG);
+$client = new BillinkClient($username, $client_id, [$log=null]);
 // test mode true|false
 $client->setTestMode(true);
 ```
