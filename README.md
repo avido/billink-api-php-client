@@ -1,6 +1,6 @@
 # Billink API Client for PHP
 
-This is an open source PHP client for the [Billink API] (https://test.billink.nl/api/docs | https://www.billink.nl/).
+Open source PHP client for the [Billink API] (https://test.billink.nl/api/docs | https://www.billink.nl/).
 
 ## Not on composer yet
 
