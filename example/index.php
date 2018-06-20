@@ -12,6 +12,8 @@ use Avido\BillinkApiClient\Request\PaymentOnHoldRequest;
 use Avido\BillinkApiClient\Request\PaymentResumeRequest;
 use Avido\BillinkApiClient\Request\FileRequest;
 use Avido\BillinkApiClient\Request\MessageRequest;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 /**
   
@@ -79,14 +81,19 @@ class billink
 {
     private $client = null;
     private $twig = null;
+    // logger 
+    private $logfile = null;
     
     public function __construct($username, $client_id)
     {
-        $this->client = new BillinkClient($username, $client_id);
-        $this->client->setTestMode(true);
-        
         $loader = new Twig_Loader_Filesystem(dirname(__FILE__) . '/views');
         $this->twig = new Twig_Environment($loader);
+        
+        // set log handler
+        $logfile = dirname(__FILE__) . "/logs/billink.log";
+        $handler = new StreamHandler($logfile, LOGGER::DEBUG);
+        $this->client = new BillinkClient($username, $client_id, $handler);
+        $this->client->setTestMode(true);
     }
     
     public function renderCreditCheck()
