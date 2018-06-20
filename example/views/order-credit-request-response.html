@@ -1,0 +1,48 @@
+{% extends 'container.html' %}
+
+{% import 'form.html' as form %}
+
+{% block content %}
+    <h1>Add order credit</h1>
+    <form action="/?v=orderCredit" method="POST">
+        {{ form.input('invoicenumber', 'Invoicenumber', invoicenumber, {helpblock: ''}) }}
+        {{ form.input('amount', 'Amount', '', {helpblock:'Decimal, format: 10.25'}) }}
+        {{ form.textarea('description', 'Message', '', {helpblock:''}) }}
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Add order credit</button>
+        </div>
+    </form>
+    
+    {% if invoices != null %}
+    <h1>Order credit Response</h1>
+    
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Invoicenumber</th>
+                <th>Status</th>
+                <th>Code</th>
+<!--                <th>Action</th>-->
+            </tr>
+        </thead>
+        <tbody>
+    {% for invoice in invoices %}
+        <tr>
+            <td>{{invoice.invoicenumber}}</td>
+            <td>{{invoice.message}}</td>
+            <td>{{invoice.code}}</td>
+            <!--<td><a href="/?v=startWorkflow&invoicenumber={{invoice.invoicenumber}}&workflownumber={{invoice.workflownumber}}">Start workflow</a></td>-->
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    <br />
+    <pre>
+        <div class="xml">
+            {{request}}
+        </div>
+    </pre>
+    
+    {% endif %} 
+{% endblock %}

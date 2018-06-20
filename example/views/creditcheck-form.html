@@ -1,0 +1,40 @@
+{% extends 'container.html' %}
+
+{% import 'form.html' as form %}
+
+{% block content %}
+    <h1>Credit Check</h1>
+    <p>
+        Please note, maximum order amount is per workflow:
+    </p>
+    <ul>
+        <li>1. 400,-</li>
+        <li>2. 2500,-</li>
+        <li>3. Unlimited</li>
+    </ul>
+    <form action="/?v=runCreditCheck" method="POST">
+        {{ form.input('type', 'Type', 'P', {helpblock:'P for B2B, B for B2B'}) }}
+        {{ form.input('companyname', 'Companyame', '', {helpblock: 'mandatory B2B'}) }}
+        {{ form.input('chamberofcommerce', 'Chamber of commerce', '', {helpblock:'mandatory B2B'}) }}
+        {{ form.input('workflownumber', 'Workflownumber', '1', {helpblock:'1,2 or 3'}) }}
+ 
+        
+       {{ form.input('firstname', 'Firstname', 'Test', {helpblock:'Min 2 chars'}) }}
+       {{ form.input('initials', 'Initials', 't.e.s.t', {helpblock:'Optional, max 6 chars'}) }}
+       {{ form.input('lastname', 'Lastname', 'MrTest', {helpblock:''}) }}
+       {{ form.input('housenumber', 'Housenumber', '28', {helpblock:''}) }}
+       {{ form.input('houseextension', 'Housenumber extension', 'A', {helpblock:''}) }}
+       {{ form.input('postalcode', 'Postalcode', '1111XX', {helpblock:''}) }}
+       {{ form.input('phonenumber', 'Phonenumber', '0612345678', {helpblock:''}) }}
+       {{ form.input('birthdate', 'Birthdate', '01-01-1980', {helpblock:'Mandatory for B2C, format: dd-mm-YYYY'}) }}
+       {{ form.input('email', 'Email', '', {helpblock:''}) }}
+       {{ form.input('orderamount', 'Orderamount', '', {helpblock:'Decimal, format: 10.25'}) }}
+       {{ form.input('ip', 'Ip', '127.0.0.1', {helpblock:''}) }}
+       {{ form.input('backdoor', 'Backdoor', '0', {helpblock:'Optional'}) }}
+         
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Reqest Credit Check</button>
+        </div>
+    </form>
+{% endblock %}
+

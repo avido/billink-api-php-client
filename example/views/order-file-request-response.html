@@ -1,0 +1,38 @@
+{% extends 'container.html' %}
+
+{% import 'form.html' as form %}
+
+{% block content %}
+    <h1>Order file/invoice pdf</h1>
+    <form action="/?v=orderFile" method="POST">
+        {{ form.input('invoicenumber', 'Invoicenumber', invoicenumber, {helpblock: ''}) }}
+        {{ form.input('workflownumber', 'Workflownumber', workflownumber, {helpblock: ''}) }}
+        
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Request order file</button>
+        </div>
+    </form>
+    
+    {% if code != null %}
+    <h1>Order File Response</h1>
+    
+    <table class="table table-striped table-bordered">
+        <tr>
+            <td>Code</td>
+            <td>{{code}}</td>
+        </tr>
+        <tr>
+            <td>Filename</td>
+            <td><a href="{{filename}}" target="_blank">{{filename}}</a></td>
+        </tr>
+    </table>
+    <br />
+    <pre>
+        <div class="xml">
+            {{request}}
+        </div>
+    </pre>
+    
+    {% endif %} 
+{% endblock %}

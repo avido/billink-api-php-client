@@ -33,8 +33,8 @@ class OrderItem extends BaseModel
             if (isset($data['priceincl'])) {
                 $this->setPrice($data['priceincl']);
             }
-            if (isset($data['btw'])) {
-                $this->setVat($data['btw']);
+            if (isset($data['vat'])) {
+                $this->setVat($data['vat']);
             }
         }
     }
@@ -60,7 +60,7 @@ class OrderItem extends BaseModel
     }
     public function setVat($vat)
     {
-        $this->vat = (int)$vat;
+        $this->vat = (float)$vat;
         return $this;
     }
     

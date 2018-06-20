@@ -254,7 +254,7 @@ class OrderRequest extends BaseRequest
     public function toXml()
     {
         $document = $this->prepXmlRequest();
-            
+
         // append data from request.
         foreach ($this->toArray() as $key=>$val) {
             if ($key == 'orderitems') {
