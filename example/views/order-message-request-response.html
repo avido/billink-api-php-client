@@ -6,7 +6,7 @@
     <h1>Order message</h1>
     <form action="/?v=orderMessage" method="POST">
         {{ form.input('invoicenumber', 'Invoicenumber', invoicenumber, {helpblock: ''}) }}
-        {{ form.input('workflownumber', 'Workflownumber', workflownumber, {helpblock: ''}) }}
+        {{ form.workflow() }}
         {{ form.textarea('message', 'Message', '', {helpblock:''}) }}
         
         <div class="form-group">

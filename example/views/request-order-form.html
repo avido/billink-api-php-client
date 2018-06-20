@@ -12,7 +12,7 @@
         {{ form.input('type', 'Type', 'P', {helpblock:'P for B2B, B for B2B'}) }}
         {{ form.input('companyname', 'Companyame', '', {helpblock: 'mandatory B2B'}) }}
         {{ form.input('chamberofcommerce', 'Chamber of commerce', '', {helpblock:'mandatory B2B'}) }}
-        {{ form.input('workflownumber', 'Workflownumber', '1', {helpblock:'1,2 or 3'}) }}
+        {{ form.workflow(workflownumber) }}
  
         
        {{ form.input('ordernumber', 'Ordernumber', ordernumber, {helpblock:''}) }}

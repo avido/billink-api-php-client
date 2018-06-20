@@ -106,13 +106,14 @@ class billink
     {
         $uuid = isset($_GET['uuid']) ? $_GET['uuid'] : '';
         $orderamount = isset($_GET['orderamount']) ? $_GET['orderamount'] : 0;
+        $workflownumber = isset($_GET['workflownumber']) ? $_GET['workflownumber'] : 0;
         $email = isset($_GET['email']) ? $_GET['email'] : '';
-        
         echo $this->twig->render('request-order-form.html', [
             'uuid' => $uuid, 
             'ordernumber' => time(), 
             'date' => date('d-m-Y'), 
             'orderamount' => $orderamount,
+            'workflownumber' => $workflownumber,
             'email' => $email
         ]);
     }
@@ -144,6 +145,7 @@ class billink
                 'uuid' => $response->getUuid(),
                 'orderamount' => $this->getPost('orderamount'),
                 'email' => $this->getPost('email'),
+                'workflownumber' => $this->getPost('workflownumber'),
                 'request' => $this->prettyPrint($creditCheckRequest->toXml())
             ]);
         } catch (\Exception $e) {

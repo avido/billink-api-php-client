@@ -6,7 +6,7 @@
     <h1>Resume order</h1>
     <form action="/?v=orderResume" method="POST">
         {{ form.input('invoicenumber', 'Invoicenumber', invoicenumber, {helpblock: ''}) }}
-        {{ form.input('workflownumber', 'Workflownumber', workflownumber, {helpblock: ''}) }}
+        {{ form.workflow(workflownumber) }}
         
         
         <div class="form-group">
