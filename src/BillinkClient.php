@@ -20,6 +20,8 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\MessageFormatter;
+use Psr\Http\Message\ResponseInterface;
+
 use Monolog\Logger;
 use Monolog\Handler\NullHandler;
 
@@ -81,7 +83,7 @@ class BillinkClient
      *Log message format
      * @var string
      */
-    private $logMessageFormat = "[{method}] - {uri} *|* <<REQUEST>> {req_body} *|* <<RESPONSE>> {res_body}";
+    private $logMessageFormat = "[{method}] - {uri} *|* {\n} <<REQUEST>> {req_body} *|* <<RESPONSE>> {res_body}";
     
     /**
      * Construct Billink API Client
@@ -420,6 +422,21 @@ class BillinkClient
         try {
             // create stack middleware
             $stack = HandlerStack::create();
+            
+
+            /**
+             * Middleware currently hijacks response body..
+             * mapResponse temp fix to rewind body stream
+             * 
+             * @see https://github.com/guzzle/guzzle/issues/1582
+             */
+            
+            $mapResponse = Middleware::mapResponse(function(ResponseInterface $response) {
+                $response->getBody()->rewind(); 
+                return $response; 
+            });
+            $stack->push($mapResponse);
+            
             $stack->push(
                 Middleware::log(
                     $this->getLogger(),
@@ -427,12 +444,6 @@ class BillinkClient
                 )
             );
             
-            /**
-             * Middleware currently hijacks response body..
-             * Untill issue is fixed.. disabled middleware (6.3.0)
-             * 
-             * @see https://github.com/guzzle/guzzle/issues/1582
-             */
             $client = new \GuzzleHttp\Client([
                 'handler' => $stack
             ]);
