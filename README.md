@@ -33,5 +33,9 @@ $client->setTestMode(true);
     </php>
 </phpunit>
 ```
+## Examples
+Go to examples folder and run php build in server
+```php
+php -S 127.0.0.1:8081
+```
 
-See the tests folder for more information and examples
