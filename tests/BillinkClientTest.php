@@ -33,6 +33,10 @@ use Monolog\Handler\StreamHandler;
 
 class BillinkClientTest extends TestCase
 {
+    // tmp defined in phpunit.xml
+    private $workflow = null;
+    private $backdoor = null;
+    
     /**
      * @var Avido\BillinkApiClient\BillinkClient
      */
@@ -44,35 +48,39 @@ class BillinkClientTest extends TestCase
         $username = getenv('PHP_USERNAME');
         // retrieve client id from phpunit.xml config
         $client_id = getenv('PHP_CLIENTID');
-        // test with logger
-#        $handler = new StreamHandler(dirname(__FILE__) . '/../apiClient.log', \Monolog\Logger::DEBUG);
-        $this->client = new BillinkClient($username, $client_id /*, $handler*/);
+        // retrieve worfklow from phpunit.xml config
+        $this->workflow = (int)getenv('API_WORKFLOW');
+        // retrieve backoor from phpunit.xml config
+        $this->backdoor= (int)getenv('API_BACKDOOR');
+        
+        $this->client = new BillinkClient($username, $client_id);
         $this->client->setTestMode(true); // enforce test mode
     }
 
+    /*****************
+     * B2C
+     *****************/
     /**
      * Test Request Credit Check
      * 
-     * @group creditcheck
-     * @group order
      */
     public function testCreditCheck()
     {
         $check = new CreditCheckRequest();
         $check->setType('P')
-            ->setWorkflownumber(1)
+            ->setWorkflownumber($this->workflow)
             ->setFirstname('T')
             ->setLastname('Test')
             ->setInitials('T')
             ->setHousenumber(1)
             ->setHouseextension('a')
             ->setPostalcode('1234AA')
-            ->setPhonenumber('0612345678')
+            ->setPhonenumber('0612312399')
             ->setBirthdate('01-01-1980')
-            ->setEmail('gokyto@cars2.club')
-            ->setOrderamount('120.09')
+            ->setEmail('unit-test-avido@billink-api-client.nl')
+            ->setOrderamount('220.09')
             ->setIp('127.0.0.1')
-            ->setBackdoor(1);
+            ->setBackdoor($this->backdoor);
         $response = $this->client->check($check);
         $this->assertEquals(500, $response->getCode());
         return $response->getUuid();
@@ -80,14 +88,15 @@ class BillinkClientTest extends TestCase
     
     /**
      * Test Credit check exception (missing phonenumber)
-     * @group creditcheck
+     * 
      */
     public function testCreditCheckBillinkClientException()
     {
         $this->expectException(BillinkClientException::class);
+        
         $check = new CreditCheckRequest();
         $check->setType('P')
-            ->setWorkflownumber(1)
+            ->setWorkflownumber($this->workflow)
             ->setFirstname('T')
             ->setLastname('Test')
             ->setInitials('T')
@@ -96,59 +105,40 @@ class BillinkClientTest extends TestCase
             ->setPostalcode('1234AA')
             ->setPhonenumber('') // missing phonenumber
             ->setBirthdate('01-01-1980')
-            ->setEmail('gokyto@cars2.club')
+            ->setEmail('unit-test-avido@billink-api-client.nl')
             ->setOrderamount('120.09')
             ->setIp('127.0.0.1')
-            ->setBackdoor(1);
+            ->setBackdoor($this->backdoor);
         $this->client->check($check);
     }
     
     /**
      * Test Credit check runtimeexception
-     * @group order
-     * @group status
-     * @group workflow
-     * @group credit
-     * @group payment
-     * @group onhold
-     * @group resume
-     * @group file
-     * @group message
-     * @group creditcheck
      */
     public function testCreditCheckRuntimeException()
     {
         $this->expectException(\RuntimeException::class);
         $check = new CreditCheckRequest();
         $check->setType('P')
-            ->setWorkflownumber(100)
+            ->setWorkflownumber(100) //<!-- wrong workflownumber
             ->setFirstname('T')
             ->setLastname('Test')
             ->setInitials('T')
             ->setHousenumber(1)
             ->setHouseextension('a')
             ->setPostalcode('1234AA')
-            ->setPhonenumber('0123456789') // missing phonenumber
+            ->setPhonenumber('0123456789')
             ->setBirthdate('01-01-1980')
-            ->setEmail('gokyto@cars2.club')
+            ->setEmail('unit-test-avido@billink-api-client.nl')
             ->setOrderamount('120.09')
             ->setIp('127.0.0.1')
-            ->setBackdoor(1);
+            ->setBackdoor($this->backdoor);
         $this->client->check($check);
     }
     
     /**
      * Request Order test
      * 
-     * @group order
-     * @group status
-     * @group workflow
-     * @group credit
-     * @group payment
-     * @group onhold
-     * @group resume
-     * @group file
-     * @group message
      * @depends testCreditCheck
      */
     public function testOrder($uuid)
@@ -157,7 +147,7 @@ class BillinkClientTest extends TestCase
         $order_id = floor(time() * (rand(0,1000)/100*10));
         $checkUuid = $uuid;
         $order = new OrderRequest();
-        $order->setWorkflownumber(1)
+        $order->setWorkflownumber($this->workflow)
             ->setOrdernumber($order_id)
             ->setDate(date("Y-m-d"))
             ->setType('P')
@@ -182,18 +172,19 @@ class BillinkClientTest extends TestCase
             ->setDeliveryAddressLastname('Test')
             ->setPhoneNumber('0612345678')
             ->setBirthdate('01-01-1980')
-            ->setEmail('gokyto@cars2.club')
+            ->setEmail('unit-test-avido@billink-api-client.nl')
             ->setIp('127.0.0.1')
             ->setAdditionalText('Additionele tekst')
             ->setTrackAndTrace('123verzondenmet')
             ->setCheckUuid($checkUuid);
+        
         // order items can be added in several ways.
         $order->addItem(new OrderItem([
             'code' => 'product-a',
             'description' => 'Product A',
             'orderquantity' => 1,
             'priceincl' => 12.09,
-            'btw' => 21
+            'vat' => 1.21
         ]));
         $orderItem = new OrderItem();
         $orderItem->setCode('product-b')
@@ -208,14 +199,14 @@ class BillinkClientTest extends TestCase
                 'description' => 'Product C',
                 'orderquantity' => 1,
                 'priceincl' => 12.09,
-                'btw' => 21
+                'vat' => 1.21
             ]),
             new OrderItem([
                 'code' => 'product-d',
                 'description' => 'Product D',
                 'orderquantity' => 1,
                 'priceincl' => 12.39,
-                'btw' => 21
+                'vat' => 1.21
             ]),
         ]);
         
@@ -227,7 +218,6 @@ class BillinkClientTest extends TestCase
     
     /**
      * Test order exception unknown UUID
-     * @group order
      */
     public function testOrderUnkownUUIDBillinkClientException()
     {
@@ -235,7 +225,7 @@ class BillinkClientTest extends TestCase
         $order_id = time();
         $checkUuid = 'unkown-uuid-' . time();
         $order = new OrderRequest();
-        $order->setWorkflownumber(1)
+        $order->setWorkflownumber($this->workflow)
             ->setOrdernumber($order_id)
             ->setDate(date("Y-m-d"))
             ->setType('P')
@@ -260,7 +250,7 @@ class BillinkClientTest extends TestCase
             ->setDeliveryAddressLastname('Test')
             ->setPhoneNumber('0612345678')
             ->setBirthdate('01-01-1980')
-            ->setEmail('gokyto@cars2.club')
+            ->setEmail('unit-test-avido@billink-api-client.nl')
             ->setIp('127.0.0.1')
             ->setAdditionalText('Additionele tekst')
             ->setTrackAndTrace('123verzondenmet')
@@ -278,7 +268,6 @@ class BillinkClientTest extends TestCase
     
     /**
      * Test order exception missing lastname
-     * @group order
      * @depends testCreditCheck
      */
     public function testOrderMissingLastnameClientException($uuid)
@@ -287,7 +276,7 @@ class BillinkClientTest extends TestCase
         $order_id = time();
         $checkUuid = $uuid;
         $order = new OrderRequest();
-        $order->setWorkflownumber(1)
+        $order->setWorkflownumber($this->workflow)
             ->setOrdernumber($order_id)
             ->setDate(date("Y-m-d"))
             ->setType('P')
@@ -312,7 +301,7 @@ class BillinkClientTest extends TestCase
             ->setDeliveryAddressLastname('Test')
             ->setPhoneNumber('0612345678')
             ->setBirthdate('01-01-1980')
-            ->setEmail('gokyto@cars2.club')
+            ->setEmail('unit-test-avido@billink-api-client.nl')
             ->setIp('127.0.0.1')
             ->setAdditionalText('Additionele tekst')
             ->setTrackAndTrace('123verzondenmet')
@@ -331,14 +320,13 @@ class BillinkClientTest extends TestCase
     /**
      * Request Status test
      * 
-     * @group status
      * @depends testOrder
      */
     public function testStatus($order_id)
     {
         
         $status = new StatusRequest();
-        $status->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => $order_id]));
+        $status->addInvoice(new Invoice(['workflownumber'=> $this->workflow, 'invoicenumber' => $order_id]));
         $response = $this->client->status($status);
         $this->assertTrue(count($response->getInvoices()) >0);
     }
@@ -346,7 +334,6 @@ class BillinkClientTest extends TestCase
     /**
      * Request Status  Exception, no invoices provided test
      * 
-     * @group status
      */
     public function testStatusMissingInvoicesClientException()
     {
@@ -358,13 +345,12 @@ class BillinkClientTest extends TestCase
     /**
      * Request Workflow Start test
      * 
-     * @group workflow
      * @depends testOrder
      */
     public function testWorkflowStart($order_id)
     {
         $workflow = new WorkflowRequest();
-        $workflow->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => $order_id]));
+        $workflow->addInvoice(new Invoice(['workflownumber'=> $this->workflow, 'invoicenumber' => $order_id]));
         $response = $this->client->startWorkflow($workflow);
         $this->assertEquals(500, $response->getCode());
     }
@@ -372,7 +358,6 @@ class BillinkClientTest extends TestCase
     /**
      * Request Status  Exception, no invoices provided test
      * 
-     * @group workflow
      */
     public function testWorkflowStartMissingInvoicesClientException()
     {
@@ -384,14 +369,13 @@ class BillinkClientTest extends TestCase
     /**
      * Request Credit test
      * 
-     * @group credit
      * @depends testOrder
      */
     public function testCredit($order_id)
     {
         
         $credit = new CreditRequest();
-        $credit->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => $order_id, 'creditamount' => 10.00, 'description' => 'credit test']));
+        $credit->addInvoice(new Invoice(['workflownumber'=> $this->workflow, 'invoicenumber' => $order_id, 'creditamount' => 10.00, 'description' => 'credit test']));
         $response = $this->client->Credit($credit);
         $this->assertTrue(count($response->getInvoices()) >0);
     }
@@ -399,14 +383,13 @@ class BillinkClientTest extends TestCase
     /**
      * Request Payment test
      * 
-     * @group payment
      * @depends testOrder
      */
     public function testPayment($order_id)
     {
         
         $payment = new PaymentRequest();
-        $payment->addInvoice(new Invoice(['workflownumber'=> 1, 'invoicenumber' => $order_id, 'amount' => 10.00, 'description' => 'payment test']));
+        $payment->addInvoice(new Invoice(['workflownumber'=> $this->workflow, 'invoicenumber' => $order_id, 'amount' => 10.00, 'description' => 'payment test']));
         $response = $this->client->Payment($payment);
         $this->assertTrue(count($response->getInvoices()) >0);
     }
@@ -415,13 +398,13 @@ class BillinkClientTest extends TestCase
     /**
      * Request Payment OnHold test
      * 
-     * @group onhold
+     * @group no-ci-test
      * @depends testOrder
      */
     public function testPaymentOnHold($order_id)
     {
         $onHold = new Request\PaymentOnHoldRequest();
-        $onHold->setWorkflowNumber(1)
+        $onHold->setWorkflowNumber($this->workflow)
             ->setInvoiceNumber($order_id)
             ->setDays(3);
         $response = $this->client->paymentOnHold($onHold);
@@ -431,13 +414,12 @@ class BillinkClientTest extends TestCase
     /**
      * Request Payment Resume test
      * 
-     * @group resume
      * @depends testOrder
      */
     public function testPaymentResume($order_id)
     {
         $paymentResume = new Request\PaymentResumeRequest();
-        $paymentResume->setWorkflowNumber(1)
+        $paymentResume->setWorkflowNumber($this->workflow)
             ->setInvoiceNumber($order_id);
         $response = $this->client->paymentResume($paymentResume);
         $this->assertEquals(200, $response->getCode());        
@@ -447,13 +429,12 @@ class BillinkClientTest extends TestCase
     /**
      * Request File (PDF) test
      * 
-     * @group file
      * @depends testOrder
      */
     public function testFile($order_id)
     {
         $fileRequest = new Request\FileRequest();
-        $fileRequest->setWorkflowNumber(1)
+        $fileRequest->setWorkflowNumber($this->workflow)
             ->setInvoiceNumber($order_id);
         $response = $this->client->file($fileRequest);
         $this->assertNotNull($response->getFilename());
@@ -462,16 +443,155 @@ class BillinkClientTest extends TestCase
     /**
      * Request Message test
      * 
-     * @group message
      * @depends testOrder
      */
     public function testMessage($order_id)
     {
         $messageRequest = new Request\MessageRequest();
-        $messageRequest->setWorkflowNumber(1)
+        $messageRequest->setWorkflowNumber($this->workflow)
             ->setInvoiceNumber($order_id)
             ->setMessage('UnitTest Message test 1234');
         $response = $this->client->message($messageRequest);
         $this->assertEquals(200, $response->getCode());        
     }
+    
+    /*****************
+     * B2B
+     *****************/
+    /**
+     * Test Request Credit Check B2B
+     * 
+     */
+    public function testCreditCheckB2B()
+    {
+        $check = new CreditCheckRequest();
+        $check->setType('B')
+            ->setWorkflownumber($this->workflow)
+            ->setCompanyname('Billink Unit Test')
+            ->setChamberOfCommerce('KvK12345')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
+            ->setHousenumber(1)
+            ->setHouseextension('a')
+            ->setPostalcode('1234AA')
+            ->setPhonenumber('0612312399')
+            ->setEmail('unit-test-avido-b2b@billink-api-client.nl')
+            ->setOrderamount('220.09')
+            ->setIp('127.0.0.1')
+            ->setBackdoor($this->backdoor);
+        $response = $this->client->check($check);
+        $this->assertEquals(500, $response->getCode());
+        return $response->getUuid();
+    }
+    
+    /**
+     * Test Credit check B2B exception (missing companyname)
+     * 
+     */
+    public function testCreditCheckB2BBillinkClientException()
+    {
+        $this->expectException(BillinkClientException::class);
+        
+        $check = new CreditCheckRequest();
+        $check->setType('B')
+            ->setWorkflownumber($this->workflow)
+            ->setChamberOfCommerce('KvK12345')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
+            ->setHousenumber(1)
+            ->setHouseextension('a')
+            ->setPostalcode('1234AA')
+            ->setPhonenumber('0612312399')
+            ->setEmail('unit-test-avido-b2b@billink-api-client.nl')
+            ->setOrderamount('120.09')
+            ->setIp('127.0.0.1')
+            ->setBackdoor($this->backdoor);
+        $this->client->check($check);
+    }
+    
+    /**
+     * Request Order test B2B
+     * 
+     * @depends testCreditCheckB2B
+     */
+    public function testOrderB2B($uuid)
+    {
+        // echo "Running test order with uuid: {$uuid}\n";
+        $order_id = floor(time() * (rand(0,1000)/100*10));
+        $checkUuid = $uuid;
+        $order = new OrderRequest();
+        $order->setWorkflownumber($this->workflow)
+            ->setOrdernumber($order_id)
+            ->setCompanyname('Billink Unit Test')
+            ->setChamberOfCommerce('KvK12345')
+            ->setDate(date("Y-m-d"))
+            ->setType('B')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
+            ->setSex('M')
+            ->setStreet('straat')
+            ->setHousenumber(1)
+            ->setHouseExtension('a')
+            ->setPostalCode('1234AA')
+            ->setCountryCode('NL')
+            ->setCity('plaats')
+            ->setDeliveryStreet('straat')
+            ->setDeliveryHousenumber(1)
+            ->setDeliveryHouseExtension('a')
+            ->setDeliveryPostalcode('1234AA')
+            ->setDeliveryCountrycode('NL')
+            ->setDeliveryCity('Plaats')
+            ->setDeliveryAddressFirstname('T')
+            ->setDeliveryAddressLastname('Test')
+            ->setPhoneNumber('0612345678')
+            ->setBirthdate('01-01-1980')
+            ->setEmail('unit-test-avido-b2b@billink-api-client.nl')
+            ->setIp('127.0.0.1')
+            ->setAdditionalText('Additionele tekst')
+            ->setTrackAndTrace('123verzondenmet')
+            ->setVariable1('var1')
+            ->setVariable2('var1')
+            ->setVariable3('var1')
+            ->setDebtorNumber('Cust1234')
+            ->setVatnumber('btw.1231.3231123.123')
+            ->setCurrency('EUR')
+            ->setState('State')
+            ->setLocality('Locality')
+            ->setCheckUuid($checkUuid);
+        
+        // order items can be added in several ways.
+        $order->addItem(new OrderItem([
+            'code' => 'product-a-b2b',
+            'description' => 'Product A',
+            'orderquantity' => 1,
+            'priceincl' => 12.09,
+            'vat' => 1.21
+        ]));
+        $orderItem = new OrderItem();
+        $orderItem->setCode('product-b-b2b')
+            ->setDescription('Product B')
+            ->setOrderQuantity(1)
+            ->setPrice(14.11)
+            ->setVat(21);
+        $order->addItem($orderItem);
+        $order->setOrderItems([
+            new OrderItem([
+                'code' => 'product-c-b2b',
+                'description' => 'Product C',
+                'orderquantity' => 1,
+                'priceincl' => 12.09,
+                'vat' => 1.21
+            ])
+        ]);
+        
+        #echo $order->toXml();
+        $response = $this->client->simpleOrder($order);
+        $this->assertEquals(200, $response->getCode());
+        return $order_id;
+    }
+    
+    
 }
