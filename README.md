@@ -32,8 +32,10 @@ $client->setTestMode(true);
 <phpunit>
   ...
     <php>
-        <env name="PHP_USERNAME" value="--YOUR USERNAME--"/>
-        <env name="PHP_CLIENTID" value="--YOUR CLIENT ID--"/>
+        <env name="PHP_USERNAME" value="apitest"/>
+        <env name="PHP_CLIENTID" value="d108a0f1bc5bc4618f150fa95cd6dc537bd774f0"/>
+        <env name="API_WORKFLOW" value="1" />
+        <env name="API_BACKDOOR" value="1" />
     </php>
 </phpunit>
 ```
