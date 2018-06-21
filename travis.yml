@@ -1,0 +1,9 @@
+language: php
+dist: trusty
+php:
+- '5.6'
+- '7.0'
+- '7.1'
+script:
+  - phpunit --exclude-group=no-ci-test
+install: composer install --dev
