@@ -17,11 +17,27 @@ class FileRequest extends BaseRequest
     {
         parent::__construct('pdf');
     }
+    
+    /**
+     * Workflownumber
+     * 
+     * @access public
+     * @param int $workflownumber
+     * @return $this
+     */
     public function setWorkflowNumber($workflownumber)
     {
-        $this->workflownumber = $workflownumber;
+        $this->workflownumber = (int)$workflownumber;
         return $this;
     }
+    
+    /**
+     * Invoicenumber
+     * 
+     * @access public
+     * @param string $invoicenumber
+     * @return $this
+     */
     public function setInvoiceNumber($invoicenumber)
     {
         $this->invoicenumber = $invoicenumber;

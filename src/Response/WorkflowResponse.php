@@ -1,5 +1,7 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
+use Avido\BillinkApiClient\Entities\Invoice;
+
 /**
     @File: WorkflowResponse.php
     @version 0.1.0
@@ -7,8 +9,6 @@ namespace Avido\BillinkApiClient\Response;
     @Package: Billink API Php Client
     @copyright   Avido
 */
-
-use Avido\BillinkApiClient\Entities\Invoice;
 
 class WorkflowResponse extends BaseResponse
 {
@@ -21,11 +21,14 @@ class WorkflowResponse extends BaseResponse
             $this->setInvoices($xml->MSG->STATUSES);
         }
     }
-    public function setCode($code)
-    {
-        $this->code = $code;
-        return $this;
-    }
+    
+    /**
+     * Invoices
+     * 
+     * @access public
+     * @param object $invoices
+     * @return $this
+     */
     public function setInvoices($invoices)
     {
         $tmp = [];

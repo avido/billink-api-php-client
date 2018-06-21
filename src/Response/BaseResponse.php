@@ -14,4 +14,32 @@ class BaseResponse extends BaseModel
 {
     protected  $code;
     protected  $description;
+    
+    /**
+     * Code
+     * 
+     * @access protected
+     * @param int $code
+     * @return $this
+     */
+    protected function setCode($code)
+    {
+        $this->code = (int)$code;
+        return $this;
+    }
+    
+    /**
+     * Description
+     * 
+     * @access protected
+     * @param string $description
+     * @return $this
+     */
+    protected function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+    
+    
 }

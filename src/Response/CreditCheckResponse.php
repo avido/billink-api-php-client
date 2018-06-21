@@ -1,5 +1,6 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
+
 /**
     @File: CreditCheckResponse.php
     @version 0.1.0
@@ -20,22 +21,26 @@ class CreditCheckResponse extends BaseResponse
             $this->setUuId((string)$xml->UUID);
         }
     }
-    public function setCode($code)
-    {
-        $this->code = $code;
-        return $this;
-    }
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
+    
+    /**
+     * UUID
+     * 
+     * @access public
+     * @param string $uuid
+     * @return $this
+     */
     public function setUuid($uuid)
     {
         $this->uuid = $uuid;
         return $this;
     }
     
+    /**
+     * UUID
+     * 
+     * @access public
+     * @return string
+     */
     public function getUuid()
     {
         return $this->uuid;
