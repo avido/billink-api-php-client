@@ -367,6 +367,38 @@ class BillinkClientTest extends TestCase
     }
     
     /**
+     * Request Payment OnHold test
+     * 
+     * @group no-ci-test
+     * @depends testOrder
+     */
+    public function testPaymentOnHold($order_id)
+    {
+        echo "Placing order on hold: {$order_id}\n";
+        $onHold = new Request\PaymentOnHoldRequest();
+        $onHold->setWorkflowNumber($this->workflow)
+            ->setInvoiceNumber($order_id)
+            ->setDays(3);
+        $response = $this->client->paymentOnHold($onHold);
+        $this->assertEquals(200, $response->getCode());        
+    }
+        
+    /**
+     * Request Payment Resume test
+     * 
+     * @depends testOrder
+     */
+    public function testPaymentResume($order_id)
+    {
+        $paymentResume = new Request\PaymentResumeRequest();
+        $paymentResume->setWorkflowNumber($this->workflow)
+            ->setInvoiceNumber($order_id);
+        $response = $this->client->paymentResume($paymentResume);
+        $this->assertEquals(200, $response->getCode());        
+    }
+        
+    
+    /**
      * Request Credit test
      * 
      * @depends testOrder
@@ -393,38 +425,6 @@ class BillinkClientTest extends TestCase
         $response = $this->client->Payment($payment);
         $this->assertTrue(count($response->getInvoices()) >0);
     }
-        
-    
-    /**
-     * Request Payment OnHold test
-     * 
-     * @group no-ci-test
-     * @depends testOrder
-     */
-    public function testPaymentOnHold($order_id)
-    {
-        $onHold = new Request\PaymentOnHoldRequest();
-        $onHold->setWorkflowNumber($this->workflow)
-            ->setInvoiceNumber($order_id)
-            ->setDays(3);
-        $response = $this->client->paymentOnHold($onHold);
-        $this->assertEquals(200, $response->getCode());        
-    }
-        
-    /**
-     * Request Payment Resume test
-     * 
-     * @depends testOrder
-     */
-    public function testPaymentResume($order_id)
-    {
-        $paymentResume = new Request\PaymentResumeRequest();
-        $paymentResume->setWorkflowNumber($this->workflow)
-            ->setInvoiceNumber($order_id);
-        $response = $this->client->paymentResume($paymentResume);
-        $this->assertEquals(200, $response->getCode());        
-    }
-        
         
     /**
      * Request File (PDF) test
