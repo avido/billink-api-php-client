@@ -6,4 +6,5 @@ php:
 - '7.1'
 script:
   - phpunit --exclude-group=no-ci-test
+
 install: composer install --dev

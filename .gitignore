@@ -1,5 +1,4 @@
 composer.phar
 composer.lock
 /vendor/
-phpunit.xml
 /example/logs/*.log
