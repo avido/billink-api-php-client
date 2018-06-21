@@ -57,6 +57,9 @@ class BillinkClientTest extends TestCase
         $this->client->setTestMode(true); // enforce test mode
     }
 
+    /*****************
+     * B2C
+     *****************/
     /**
      * Test Request Credit Check
      * 
@@ -395,6 +398,7 @@ class BillinkClientTest extends TestCase
     /**
      * Request Payment OnHold test
      * 
+     * @group no-ci-test
      * @depends testOrder
      */
     public function testPaymentOnHold($order_id)
@@ -450,4 +454,144 @@ class BillinkClientTest extends TestCase
         $response = $this->client->message($messageRequest);
         $this->assertEquals(200, $response->getCode());        
     }
+    
+    /*****************
+     * B2B
+     *****************/
+    /**
+     * Test Request Credit Check B2B
+     * 
+     */
+    public function testCreditCheckB2B()
+    {
+        $check = new CreditCheckRequest();
+        $check->setType('B')
+            ->setWorkflownumber($this->workflow)
+            ->setCompanyname('Billink Unit Test')
+            ->setChamberOfCommerce('KvK12345')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
+            ->setHousenumber(1)
+            ->setHouseextension('a')
+            ->setPostalcode('1234AA')
+            ->setPhonenumber('0612312399')
+            ->setEmail('unit-test-avido-b2b@billink-api-client.nl')
+            ->setOrderamount('220.09')
+            ->setIp('127.0.0.1')
+            ->setBackdoor($this->backdoor);
+        $response = $this->client->check($check);
+        $this->assertEquals(500, $response->getCode());
+        return $response->getUuid();
+    }
+    
+    /**
+     * Test Credit check B2B exception (missing companyname)
+     * 
+     */
+    public function testCreditCheckB2BBillinkClientException()
+    {
+        $this->expectException(BillinkClientException::class);
+        
+        $check = new CreditCheckRequest();
+        $check->setType('B')
+            ->setWorkflownumber($this->workflow)
+            ->setChamberOfCommerce('KvK12345')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
+            ->setHousenumber(1)
+            ->setHouseextension('a')
+            ->setPostalcode('1234AA')
+            ->setPhonenumber('0612312399')
+            ->setEmail('unit-test-avido-b2b@billink-api-client.nl')
+            ->setOrderamount('120.09')
+            ->setIp('127.0.0.1')
+            ->setBackdoor($this->backdoor);
+        $this->client->check($check);
+    }
+    
+    /**
+     * Request Order test B2B
+     * 
+     * @depends testCreditCheckB2B
+     */
+    public function testOrderB2B($uuid)
+    {
+        // echo "Running test order with uuid: {$uuid}\n";
+        $order_id = floor(time() * (rand(0,1000)/100*10));
+        $checkUuid = $uuid;
+        $order = new OrderRequest();
+        $order->setWorkflownumber($this->workflow)
+            ->setOrdernumber($order_id)
+            ->setCompanyname('Billink Unit Test')
+            ->setChamberOfCommerce('KvK12345')
+            ->setDate(date("Y-m-d"))
+            ->setType('B')
+            ->setFirstname('T')
+            ->setLastname('Test')
+            ->setInitials('T')
+            ->setSex('M')
+            ->setStreet('straat')
+            ->setHousenumber(1)
+            ->setHouseExtension('a')
+            ->setPostalCode('1234AA')
+            ->setCountryCode('NL')
+            ->setCity('plaats')
+            ->setDeliveryStreet('straat')
+            ->setDeliveryHousenumber(1)
+            ->setDeliveryHouseExtension('a')
+            ->setDeliveryPostalcode('1234AA')
+            ->setDeliveryCountrycode('NL')
+            ->setDeliveryCity('Plaats')
+            ->setDeliveryAddressFirstname('T')
+            ->setDeliveryAddressLastname('Test')
+            ->setPhoneNumber('0612345678')
+            ->setBirthdate('01-01-1980')
+            ->setEmail('unit-test-avido-b2b@billink-api-client.nl')
+            ->setIp('127.0.0.1')
+            ->setAdditionalText('Additionele tekst')
+            ->setTrackAndTrace('123verzondenmet')
+            ->setVariable1('var1')
+            ->setVariable2('var1')
+            ->setVariable3('var1')
+            ->setDebtorNumber('Cust1234')
+            ->setVatnumber('btw.1231.3231123.123')
+            ->setCurrency('EUR')
+            ->setState('State')
+            ->setLocality('Locality')
+            ->setCheckUuid($checkUuid);
+        
+        // order items can be added in several ways.
+        $order->addItem(new OrderItem([
+            'code' => 'product-a-b2b',
+            'description' => 'Product A',
+            'orderquantity' => 1,
+            'priceincl' => 12.09,
+            'vat' => 1.21
+        ]));
+        $orderItem = new OrderItem();
+        $orderItem->setCode('product-b-b2b')
+            ->setDescription('Product B')
+            ->setOrderQuantity(1)
+            ->setPrice(14.11)
+            ->setVat(21);
+        $order->addItem($orderItem);
+        $order->setOrderItems([
+            new OrderItem([
+                'code' => 'product-c-b2b',
+                'description' => 'Product C',
+                'orderquantity' => 1,
+                'priceincl' => 12.09,
+                'vat' => 1.21
+            ])
+        ]);
+        
+        #echo $order->toXml();
+        $response = $this->client->simpleOrder($order);
+        $this->assertEquals(200, $response->getCode());
+        return $order_id;
+    }
+    
+    
 }
