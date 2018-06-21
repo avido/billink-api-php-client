@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/avido/billink-api-php-client.svg?branch=master)](https://travis-ci.com/avido/billink-api-php-client)
+
+
 # Billink API Client for PHP
 
 Open source PHP client for the [Billink API] (https://test.billink.nl/api/docs | https://www.billink.nl/).
