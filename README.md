@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.com/avido/billink-api-php-client.svg?branch=master)](https://travis-ci.com/avido/billink-api-php-client)
+[![Latest Stable Version](https://poser.pugx.org/avido/billink-api-php-client/v/stable)](https://packagist.org/packages/avido/billink-api-php-client)
+[![Total Downloads](https://poser.pugx.org/avido/billink-api-php-client/downloads)](https://packagist.org/packages/avido/billink-api-php-client)
+[![License](https://poser.pugx.org/avido/billink-api-php-client/license)](https://packagist.org/packages/avido/billink-api-php-client)
 
 
 # Billink API Client for PHP
