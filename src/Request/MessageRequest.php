@@ -18,16 +18,40 @@ class MessageRequest extends BaseRequest
     {
         parent::__construct('message');
     }
+    
+    /**
+     * Workflownumber
+     * 
+     * @access public
+     * @param int $workflownumber
+     * @return $this
+     */
     public function setWorkflowNumber($workflownumber)
     {
-        $this->workflownumber = $workflownumber;
+        $this->workflownumber = (int)$workflownumber;
         return $this;
     }
+    
+    /**
+     * Invoicenumber
+     * 
+     * @access public
+     * @param string $invoicenumber
+     * @return $this
+     */
     public function setInvoiceNumber($invoicenumber)
     {
         $this->invoicenumber = $invoicenumber;
         return $this;
     }
+    
+    /**
+     * Message
+     * 
+     * @access public
+     * @param string $message
+     * @return $this
+     */
     public function setMessage($message)
     {
         $this->message = $message;

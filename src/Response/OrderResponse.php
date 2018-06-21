@@ -1,5 +1,6 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
+
 /**
     @File: OrderResponse.php
     @version 0.1.0
@@ -17,15 +18,5 @@ class OrderResponse extends BaseResponse
             $this->setCode((string)$xml->MSG->CODE);
             $this->setDescription ((string)$xml->MSG->DESCRIPTION);
         }
-    }
-    public function setCode($code)
-    {
-        $this->code = $code;
-        return $this;
-    }
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
     }
 }

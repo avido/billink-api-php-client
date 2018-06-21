@@ -38,53 +38,133 @@ class OrderItem extends BaseModel
             }
         }
     }
+    
+    /**
+     * Code 
+     * 
+     * @access public
+     * @param mixed $code
+     * @return $this
+     */
     public function setCode($code)
     {
         $this->code = $code;
         return $this;
     }
+    
+    /**
+     * Description
+     * 
+     * @access public
+     * @param string $description
+     * @return $this
+     */
     public function setDescription($description)
     {
         $this->description = $description;
         return $this;
     }
+    
+    /**
+     * Quantity
+     * 
+     * @access public
+     * @param int $orderQuantity
+     * @return $this
+     */
     public function setOrderQuantity($orderQuantity)
     {
-        $this->orderQuantity = $orderQuantity;
+        $this->orderQuantity = (int)$orderQuantity;
         return $this;
     }
+    
+    /**
+     * Price
+     * 
+     * @access public
+     * @param float $price
+     * @return $this
+     */
     public function setPrice($price)
     {
         $this->price = number_format($price, 2, '.', ',');
         return $this;
     }
+    
+    /**
+     * Vat 
+     * 
+     * @access public
+     * @param float $vat
+     * @return $this
+     */
     public function setVat($vat)
     {
         $this->vat = (float)$vat;
         return $this;
     }
     
+    /**
+     * Code 
+     * 
+     * @access public
+     * @return string
+     */
     public function getCode()
     {
         return $this->code;
     }
+    
+    /**
+     * Description
+     * 
+     * @access public
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
     }
+    
+    /**
+     * Order quantity
+     * 
+     * @access public
+     * @return int
+     */
     public function getOrderQuantity()
     {
-        return $this->orderQuantity;
-    }
-    public function getPrice()
-    {
-        return $this->price;
-    }
-    public function getVat()
-    {
-        return (int)$this->vat;
+        return (int)$this->orderQuantity;
     }
     
+    /**
+     * Price
+     * 
+     * @access public
+     * @return float
+     */
+    public function getPrice()
+    {
+        return (float)$this->price;
+    }
+    
+    /**
+     * Vat 
+     * 
+     * @access public
+     * @return float
+     */
+    public function getVat()
+    {
+        return (float)$this->vat;
+    }
+    
+    /**
+     * Cast object to array
+     * 
+     * @access public
+     * @return array
+     */
     public function toArray() {
         return [
             'code' => $this->code,

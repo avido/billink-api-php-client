@@ -1,5 +1,6 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
+
 /**
     @File: MessageResponse.php
     @version 0.1.0
@@ -9,24 +10,11 @@ namespace Avido\BillinkApiClient\Response;
 */
 class MessageResponse extends BaseResponse
 {
-    protected  $code;
-    protected  $description;
-    
     public function __construct($xml = null)
     {
         if ($xml instanceof \SimpleXMLElement) {
             $this->setCode((string)$xml->MSG->CODE);
             $this->setDescription((string)$xml->MSG->DESCRIPTION);
         }
-    }
-    public function setCode($code)
-    {
-        $this->code = $code;
-        return $this;
-    }
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
     }
 }

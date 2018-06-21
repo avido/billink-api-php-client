@@ -1,5 +1,6 @@
 <?php
 namespace Avido\BillinkApiClient\Response;
+
 /**
     @File: FileResponse.php
     @version 0.1.0
@@ -9,7 +10,6 @@ namespace Avido\BillinkApiClient\Response;
 */
 class FileResponse extends BaseResponse
 {
-    protected  $code;
     protected  $filename;
     
     public function __construct($xml = null)
@@ -19,17 +19,26 @@ class FileResponse extends BaseResponse
             $this->setFilename((string)$xml->MSG->DESCRIPTION);
         }
     }
-    public function setCode($code)
-    {
-        $this->code = $code;
-        return $this;
-    }
+    
+    /**
+     * Filename
+     * 
+     * @access public
+     * @param string $filename
+     * @return $this
+     */
     public function setFilename($filename)
     {
         $this->filename = $filename;
         return $this;
     }
     
+    /**
+     * Filename
+     * 
+     * @access public
+     * @return mixed string|null
+     */
     public function getFilename()
     {
         return ($this->filename != '') ? $this->filename : null;

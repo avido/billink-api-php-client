@@ -20,16 +20,39 @@ class PaymentOnHoldRequest extends BaseRequest
         parent::__construct('Onhold');
     }
     
+    /**
+     * Workflownumber
+     * 
+     * @access public
+     * @param int $workflownumber
+     * @return $this
+     */
     public function setWorkflowNumber($workflownumber)
     {
-        $this->workflownumber = $workflownumber;
+        $this->workflownumber = (int)$workflownumber;
         return $this;
     }
+    
+    /**
+     * Invoice number
+     * 
+     * @access public
+     * @param string $invoicenumber
+     * @return $this
+     */
     public function setInvoiceNumber($invoicenumber)
     {
         $this->invoicenumber = $invoicenumber;
         return $this;
     }
+    
+    /**
+     * Days (to put on hold)
+     * 
+     * @access public
+     * @param int $days
+     * @return $this
+     */
     public function setDays($days)
     {
         $this->days = (int)$days;
