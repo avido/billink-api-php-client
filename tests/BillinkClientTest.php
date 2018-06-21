@@ -165,9 +165,9 @@ class BillinkClientTest extends TestCase
             ->setDeliveryStreet('straat')
             ->setDeliveryHousenumber(1)
             ->setDeliveryHouseExtension('a')
-            ->setDeliveryPostalcode('1234AA')
+            ->setDeliveryPostalcode('1234AB')
             ->setDeliveryCountrycode('NL')
-            ->setDeliveryCity('Plaats')
+            ->setDeliveryCity('Plaats anders')
             ->setDeliveryAddressFirstname('T')
             ->setDeliveryAddressLastname('Test')
             ->setPhoneNumber('0612345678')
@@ -176,6 +176,14 @@ class BillinkClientTest extends TestCase
             ->setIp('127.0.0.1')
             ->setAdditionalText('Additionele tekst')
             ->setTrackAndTrace('123verzondenmet')
+            ->setVariable1('var1')
+            ->setVariable2('var1')
+            ->setVariable3('var1')
+            ->setDebtorNumber('Cust1234')
+            ->setVatnumber('btw.1231.3231123.123')
+            ->setCurrency('EUR')
+            ->setState('State')
+            ->setLocality('Locality')
             ->setCheckUuid($checkUuid);
         
         // order items can be added in several ways.
