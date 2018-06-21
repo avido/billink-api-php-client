@@ -5,8 +5,6 @@
 
 Open source PHP client for the [Billink API] (https://test.billink.nl/api/docs | https://www.billink.nl/).
 
-## Not on composer yet
-
 ## Installation
 Get it with [composer](https://getcomposer.org)
 
